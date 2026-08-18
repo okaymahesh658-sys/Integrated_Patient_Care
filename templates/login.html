@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="max-width: 1200px; margin: 1rem auto;">
+
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h2 style="font-size: 1.8rem; font-weight: 700; color: #0369a1;">Patient Care Management System For Health Care Services</h2>
+        <p style="color: #64748b; margin-top: 0.25rem;">Please Login to Continue</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem;">
+        
+        <!-- Admin Login Card -->
+        <div class="card" style="border-top: 4px solid #0284c7;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                <div style="width: 40px; height: 40px; background: #e0f2fe; color: #0284c7; border-radius: 50%; display: grid; place-items: center; font-size: 1.1rem;">
+                    <i class="fa-solid fa-user-gear"></i>
+                </div>
+                <div>
+                    <h3 style="font-size: 1.05rem; font-weight: 700;">Admin Login</h3>
+                    <div style="font-size: 0.75rem; color: #64748b;">System Administrator</div>
+                </div>
+            </div>
+
+            <form action="/login" method="POST">
+                <input type="hidden" name="role" value="Admin">
+                <div style="margin-bottom: 0.85rem;">
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.35rem;">Email</label>
+                    <input type="email" name="email" value="admin@ipcms.com" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+                <div style="margin-bottom: 0.85rem;">
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.35rem;">Password</label>
+                    <input type="password" name="password" value="admin123" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;"><i class="fa-solid fa-lock"></i> Login as Admin</button>
+            </form>
+
+            <div style="background: #f8fafc; padding: 0.6rem; border-radius: 6px; margin-top: 1rem; font-size: 0.75rem; color: #64748b;">
+                <strong>Default Admin Credentials:</strong><br>
+                Email: admin@ipcms.com<br>
+                Password: admin123
+            </div>
+        </div>
+
+        <!-- Doctor Login Card -->
+        <div class="card" style="border-top: 4px solid #10b981;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                <div style="width: 40px; height: 40px; background: #d1fae5; color: #10b981; border-radius: 50%; display: grid; place-items: center; font-size: 1.1rem;">
+                    <i class="fa-solid fa-user-md"></i>
+                </div>
+                <div>
+                    <h3 style="font-size: 1.05rem; font-weight: 700;">Doctor Login</h3>
+                    <div style="font-size: 0.75rem; color: #64748b;">Medical Practitioner</div>
+                </div>
+            </div>
+
+            <form action="/login" method="POST">
+                <input type="hidden" name="role" value="Doctor">
+                <div style="margin-bottom: 0.85rem;">
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.35rem;">Email</label>
+                    <input type="email" name="email" value="doctor@ipcms.com" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+                <div style="margin-bottom: 0.85rem;">
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.35rem;">Password</label>
+                    <input type="password" name="password" value="doctor123" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%; justify-content: center;"><i class="fa-solid fa-lock"></i> Login as Doctor</button>
+            </form>
+
+            <div style="background: #f8fafc; padding: 0.6rem; border-radius: 6px; margin-top: 1rem; font-size: 0.75rem; color: #64748b;">
+                <strong>Default Doctor Credentials:</strong><br>
+                Email: doctor@ipcms.com<br>
+                Password: doctor123
+            </div>
+        </div>
+
+        <!-- Nurse Login Card -->
+        <div class="card" style="border-top: 4px solid #8b5cf6;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                <div style="width: 40px; height: 40px; background: #ede9fe; color: #8b5cf6; border-radius: 50%; display: grid; place-items: center; font-size: 1.1rem;">
+                    <i class="fa-solid fa-user-nurse"></i>
+                </div>
+                <div>
+                    <h3 style="font-size: 1.05rem; font-weight: 700;">Nurse Login</h3>
+                    <div style="font-size: 0.75rem; color: #64748b;">Nursing Staff</div>
+                </div>
+            </div>
+
+            <form action="/login" method="POST">
+                <input type="hidden" name="role" value="Nurse">
+                <div style="margin-bottom: 0.85rem;">
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.35rem;">Email</label>
+                    <input type="email" name="email" value="nurse@ipcms.com" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+                <div style="margin-bottom: 0.85rem;">
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.35rem;">Password</label>
+                    <input type="password" name="password" value="nurse123" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+                <button type="submit" class="btn" style="background: #8b5cf6; color: white; width: 100%; justify-content: center;"><i class="fa-solid fa-lock"></i> Login as Nurse</button>
+            </form>
+
+            <div style="background: #f8fafc; padding: 0.6rem; border-radius: 6px; margin-top: 1rem; font-size: 0.75rem; color: #64748b;">
+                <strong>Default Nurse Credentials:</strong><br>
+                Email: nurse@ipcms.com<br>
+                Password: nurse123
+            </div>
+        </div>
+
+        <!-- Patient Login Card -->
+        <div class="card" style="border-top: 4px solid #f97316;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                <div style="width: 40px; height: 40px; background: #ffedd5; color: #f97316; border-radius: 50%; display: grid; place-items: center; font-size: 1.1rem;">
+                    <i class="fa-solid fa-user-injured"></i>
+                </div>
+                <div>
+                    <h3 style="font-size: 1.05rem; font-weight: 700;">Patient Login</h3>
+                    <div style="font-size: 0.75rem; color: #64748b;">Registered Patient</div>
+                </div>
+            </div>
+
+            <form action="/login" method="POST">
+                <input type="hidden" name="role" value="Patient">
+                <div style="margin-bottom: 0.85rem;">
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.35rem;">Email</label>
+                    <input type="email" name="email" value="patient@ipcms.com" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+                <div style="margin-bottom: 0.85rem;">
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.35rem;">Password</label>
+                    <input type="password" name="password" value="patient123" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+                <button type="submit" class="btn" style="background: #f97316; color: white; width: 100%; justify-content: center;"><i class="fa-solid fa-lock"></i> Login as Patient</button>
+            </form>
+
+            <div style="background: #f8fafc; padding: 0.6rem; border-radius: 6px; margin-top: 1rem; font-size: 0.75rem; color: #64748b;">
+                <strong>Default Patient Credentials:</strong><br>
+                Email: patient@ipcms.com<br>
+                Password: patient123
+            </div>
+        </div>
+
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem;">
+        <p style="font-size: 0.9rem; color: #64748b;">Don't have an account? <a href="/register" style="color: #0284c7; font-weight: 600;">Register New Account</a></p>
+    </div>
+</div>
+{% endblock %}

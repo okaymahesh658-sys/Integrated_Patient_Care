@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.6rem; font-weight: 700; color: var(--text-dark); display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-heart-pulse" style="color: #ef4444;"></i> Patient Feedback & Satisfaction Module
+        </h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Milestone 4 - Service quality monitoring, ratings collection, & patient satisfaction analytics</p>
+    </div>
+    <button onclick="document.getElementById('feedbackModal').style.display='flex'" class="btn-primary" style="background: #10b981; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+        <i class="fa-solid fa-plus-circle"></i> Submit Patient Feedback
+    </button>
+</div>
+
+<!-- Overview Metric Cards -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+    <div style="background: var(--bg-card); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--card-shadow); text-align: center;">
+        <div style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">Overall Satisfaction Score</div>
+        <div style="font-size: 2.2rem; font-weight: 800; color: #10b981; margin: 0.5rem 0;">{{ overall_avg }} / 5.0</div>
+        <div style="color: #f59e0b; font-size: 1.1rem;">
+            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+        </div>
+    </div>
+    <div style="background: var(--bg-card); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--card-shadow); text-align: center;">
+        <div style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">Doctor Performance Rating</div>
+        <div style="font-size: 2.2rem; font-weight: 800; color: #0284c7; margin: 0.5rem 0;">{{ avg_doc }} / 5.0</div>
+        <div style="color: var(--text-muted); font-size: 0.8rem;">Based on consultation reviews</div>
+    </div>
+    <div style="background: var(--bg-card); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--card-shadow); text-align: center;">
+        <div style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">Hospital Services Rating</div>
+        <div style="font-size: 2.2rem; font-weight: 800; color: #8b5cf6; margin: 0.5rem 0;">{{ avg_hosp }} / 5.0</div>
+        <div style="color: var(--text-muted); font-size: 0.8rem;">Facilities & nursing care</div>
+    </div>
+    <div style="background: var(--bg-card); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--card-shadow); text-align: center;">
+        <div style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">Laboratory & Pharmacy</div>
+        <div style="font-size: 2.2rem; font-weight: 800; color: #f59e0b; margin: 0.5rem 0;">{{ avg_lab }} / 5.0</div>
+        <div style="color: var(--text-muted); font-size: 0.8rem;">Diagnostic & medicine speed</div>
+    </div>
+</div>
+
+<!-- Feedback Table & History -->
+<div style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--card-shadow); overflow: hidden;">
+    <div style="padding: 1.25rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 1.1rem; font-weight: 700;">Submitted Patient Reviews & Ratings</h3>
+        <span style="background: #e0f2fe; color: #0369a1; padding: 0.3rem 0.75rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem;">Total Reviews: {{ total_count }}</span>
+    </div>
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left;">
+            <thead>
+                <tr style="background: var(--table-header-bg); color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">
+                    <th style="padding: 0.9rem 1.2rem;">Patient</th>
+                    <th style="padding: 0.9rem 1.2rem;">Doctor / Department</th>
+                    <th style="padding: 0.9rem 1.2rem;">Doctor Rating</th>
+                    <th style="padding: 0.9rem 1.2rem;">Hospital Rating</th>
+                    <th style="padding: 0.9rem 1.2rem;">Lab / Pharmacy</th>
+                    <th style="padding: 0.9rem 1.2rem;">Comments</th>
+                    <th style="padding: 0.9rem 1.2rem;">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fb in feedbacks %}
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 1rem 1.2rem; font-weight: 600;">{{ fb.patient_name }}</td>
+                    <td style="padding: 1rem 1.2rem;">{{ fb.doctor_name }} <br><small style="color: var(--text-muted);">{{ fb.department }}</small></td>
+                    <td style="padding: 1rem 1.2rem; color: #f59e0b; font-weight: 700;">
+                        {{ fb.doctor_rating }} <i class="fa-solid fa-star"></i>
+                    </td>
+                    <td style="padding: 1rem 1.2rem; color: #f59e0b; font-weight: 700;">
+                        {{ fb.hospital_rating }} <i class="fa-solid fa-star"></i>
+                    </td>
+                    <td style="padding: 1rem 1.2rem; color: #f59e0b; font-weight: 700;">
+                        Lab: {{ fb.lab_rating }} ★ | Pharm: {{ fb.pharmacy_rating }} ★
+                    </td>
+                    <td style="padding: 1rem 1.2rem; color: var(--text-muted); font-style: italic; max-width: 300px;">
+                        "{{ fb.comments }}"
+                    </td>
+                    <td style="padding: 1rem 1.2rem; color: var(--text-muted); font-size: 0.85rem;">
+                        {{ fb.created_at.strftime('%Y-%m-%d %H:%M') if fb.created_at else '2026-05-21' }}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" style="padding: 2rem; text-align: center; color: var(--text-muted);">No patient feedback records found. Click above to submit feedback!</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Form -->
+<div id="feedbackModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2000; justify-content: center; align-items: center;">
+    <div style="background: var(--bg-card); width: 90%; max-width: 550px; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); padding: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+            <h3 style="font-size: 1.2rem; font-weight: 700;"><i class="fa-solid fa-pen-to-square" style="color: #0284c7;"></i> Submit Patient Feedback</h3>
+            <button onclick="document.getElementById('feedbackModal').style.display='none'" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+        </div>
+        <form action="/feedback/submit" method="POST">
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem;">Patient Name</label>
+                <input type="text" name="patient_name" value="{{ current_user.full_name if current_user.is_authenticated else 'Ravi Kumar' }}" required style="width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-dark);">
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem;">Doctor</label>
+                    <select name="doctor_name" style="width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-dark);">
+                        {% for doc in doctors %}
+                        <option value="{{ doc.full_name }}">{{ doc.full_name }} ({{ doc.specialization }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem;">Department</label>
+                    <input type="text" name="department" value="Cardiology" style="width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-dark);">
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem;">Doctor Rating (1-5)</label>
+                    <select name="doctor_rating" style="width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-dark);">
+                        <option value="5">5 ★★★★★ (Excellent)</option>
+                        <option value="4">4 ★★★★☆ (Very Good)</option>
+                        <option value="3">3 ★★★☆☆ (Good)</option>
+                        <option value="2">2 ★★☆☆☆ (Fair)</option>
+                        <option value="1">1 ★☆☆☆☆ (Poor)</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem;">Hospital Rating (1-5)</label>
+                    <select name="hospital_rating" style="width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-dark);">
+                        <option value="5">5 ★★★★★ (Excellent)</option>
+                        <option value="4">4 ★★★★☆ (Very Good)</option>
+                        <option value="3">3 ★★★☆☆ (Good)</option>
+                        <option value="2">2 ★★☆☆☆ (Fair)</option>
+                        <option value="1">1 ★☆☆☆☆ (Poor)</option>
+                    </select>
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem;">Laboratory Service Rating</label>
+                    <select name="lab_rating" style="width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-dark);">
+                        <option value="5">5 ★★★★★ (Excellent)</option>
+                        <option value="4">4 ★★★★☆ (Very Good)</option>
+                        <option value="3">3 ★★★☆☆ (Good)</option>
+                        <option value="2">2 ★★☆☆☆ (Fair)</option>
+                        <option value="1">1 ★☆☆☆☆ (Poor)</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem;">Pharmacy Service Rating</label>
+                    <select name="pharmacy_rating" style="width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-dark);">
+                        <option value="5">5 ★★★★★ (Excellent)</option>
+                        <option value="4">4 ★★★★☆ (Very Good)</option>
+                        <option value="3">3 ★★★☆☆ (Good)</option>
+                        <option value="2">2 ★★☆☆☆ (Fair)</option>
+                        <option value="1">1 ★☆☆☆☆ (Poor)</option>
+                    </select>
+                </div>
+            </div>
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem;">Comments & Suggestions</label>
+                <textarea name="comments" rows="3" placeholder="Share your consultation or care experience..." style="width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-dark);"></textarea>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <button type="button" onclick="document.getElementById('feedbackModal').style.display='none'" style="padding: 0.6rem 1rem; border-radius: 6px; border: 1px solid var(--border-color); background: transparent; cursor: pointer; color: var(--text-dark);">Cancel</button>
+                <button type="submit" style="padding: 0.6rem 1.2rem; border-radius: 6px; border: none; background: #0284c7; color: white; font-weight: 600; cursor: pointer;">Submit Review</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

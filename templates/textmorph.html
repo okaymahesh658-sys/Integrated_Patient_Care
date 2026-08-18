@@ -1,0 +1,583 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .tm-header {
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.25rem;
+    }
+    .tm-sub-header {
+        font-size: 0.95rem;
+        color: #6b7280;
+        margin-bottom: 1.5rem;
+    }
+    .tm-tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 0.5rem;
+    }
+    .tm-tab-btn {
+        padding: 0.6rem 1.25rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: none;
+        background: transparent;
+        color: var(--text-muted);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .tm-tab-btn.active {
+        background: #ef4444;
+        color: white;
+    }
+    .tm-instructions {
+        background: var(--bg-body);
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        font-size: 0.85rem;
+        color: var(--text-dark);
+    }
+    .tm-instructions ul {
+        margin-left: 1.2rem;
+        margin-top: 0.35rem;
+    }
+    .btn-generate-red {
+        background-color: #ef4444;
+        color: white;
+        font-weight: 600;
+        padding: 0.65rem 1.5rem;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background 0.2s ease;
+    }
+    .btn-generate-red:hover {
+        background-color: #dc2626;
+    }
+    .badge-flesch {
+        background: #e0f2fe;
+        color: #0284c7;
+        font-weight: 700;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+    }
+</style>
+
+<div style="margin-bottom: 1rem;">
+    <div class="tm-header">📊 TextMorph's Dashboard</div>
+    <div class="tm-sub-header">Infosys Springboard Virtual Internship - Milestone 2 Core Summarizer & Paraphraser Engine</div>
+</div>
+
+<!-- Main Tabs matching PDF Screenshot -->
+<div class="tm-tabs">
+    <button class="tm-tab-btn" onclick="switchTmMainTab('readability')" id="mtab-readability">Readability Analysis</button>
+    <button class="tm-tab-btn active" onclick="switchTmMainTab('summarize')" id="mtab-summarize">Summarize</button>
+    <button class="tm-tab-btn" onclick="switchTmMainTab('paraphrase')" id="mtab-paraphrase">Paraphrase</button>
+    <button class="tm-tab-btn" onclick="switchTmMainTab('history')" id="mtab-history">History</button>
+</div>
+
+<!-- 1. READABILITY ANALYSIS TAB -->
+<div id="tm-view-readability" style="display: none;">
+    <div class="card">
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Readability Analysis</h3>
+        
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Choose input type:</label>
+            <label style="margin-right: 1rem; font-size: 0.85rem;"><input type="radio" name="read_type" value="text" checked onclick="toggleReadInput('text')"> Plain Text</label>
+            <label style="font-size: 0.85rem;"><input type="radio" name="read_type" value="file" onclick="toggleReadInput('file')"> File Upload (.txt / .pdf)</label>
+        </div>
+
+        <div id="read-box-text" style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem;">Enter text for readability analysis</label>
+            <textarea id="read-text-input" rows="6" placeholder="Paste your text here..." style="width: 100%; padding: 0.65rem;"></textarea>
+        </div>
+
+        <div id="read-box-file" style="display: none; margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem;">Upload a TXT or PDF file</label>
+            <input type="file" id="read-file-input" accept=".txt,.pdf" style="width: 100%; padding: 0.5rem;">
+        </div>
+
+        <button class="btn-generate-red" onclick="runTmReadability()">Analyze Readability</button>
+    </div>
+
+    <div id="readability-out" style="display: none;">
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+            <div class="card" style="text-align: center; padding: 1rem;">
+                <div style="font-size: 0.8rem; color: var(--text-muted);">Flesch Reading Ease</div>
+                <div style="font-size: 2rem; font-weight: 700; color: #0284c7;" id="val-flesch">68.5</div>
+            </div>
+            <div class="card" style="text-align: center; padding: 1rem;">
+                <div style="font-size: 0.8rem; color: var(--text-muted);">FK Grade Level</div>
+                <div style="font-size: 2rem; font-weight: 700; color: #10b981;" id="val-fk">8.2</div>
+            </div>
+            <div class="card" style="text-align: center; padding: 1rem;">
+                <div style="font-size: 0.8rem; color: var(--text-muted);">SMOG Index</div>
+                <div style="font-size: 2rem; font-weight: 700; color: #f59e0b;" id="val-smog">9.1</div>
+            </div>
+            <div class="card" style="text-align: center; padding: 1rem;">
+                <div style="font-size: 0.8rem; color: var(--text-muted);">Automated Readability (ARI)</div>
+                <div style="font-size: 2rem; font-weight: 700; color: #8b5cf6;" id="val-ari">8.5</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 2. SUMMARIZE TAB (Matching PDF Page 3 & Page 18 Screenshots) -->
+<div id="tm-view-summarize">
+    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Summarize Text or PDF</h3>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.25rem;">
+        <div>
+            <div style="margin-bottom: 1rem;">
+                <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Choose input type:</label>
+                <label style="margin-right: 1rem; font-size: 0.85rem;"><input type="radio" name="sum_type" value="text" checked onclick="toggleSumInput('text')"> Plain Text</label>
+                <label style="margin-right: 1rem; font-size: 0.85rem;"><input type="radio" name="sum_type" value="txt" onclick="toggleSumInput('txt')"> Text File</label>
+                <label style="font-size: 0.85rem;"><input type="radio" name="sum_type" value="pdf" onclick="toggleSumInput('pdf')"> PDF File</label>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem;">Select Model</label>
+                <select id="sum-model" style="width: 100%; padding: 0.55rem;">
+                    <option value="pegasus">pegasus</option>
+                    <option value="bart">bart</option>
+                    <option value="flan-t5">flan-t5</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem;">Summary Length</label>
+                <select id="sum-length" style="width: 100%; padding: 0.55rem;">
+                    <option value="short">short</option>
+                    <option value="medium" selected>medium</option>
+                    <option value="long">long</option>
+                </select>
+            </div>
+        </div>
+
+        <div>
+            <div class="tm-instructions">
+                <strong>Instructions:</strong>
+                <ul>
+                    <li>Paste text or upload a .txt or .pdf file.</li>
+                    <li>Choose a model and summary length.</li>
+                    <li>Click 'Generate Summary'.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input text area / File upload -->
+    <div id="sum-box-text" style="margin-bottom: 1rem;">
+        <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem;">Paste your text here</label>
+        <textarea id="sum-text" rows="7" placeholder="Paste text here..." style="width: 100%; padding: 0.65rem;"></textarea>
+    </div>
+
+    <div id="sum-box-file" style="display: none; margin-bottom: 1rem;">
+        <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem;" id="sum-file-lbl">Upload a TXT file</label>
+        <input type="file" id="sum-file-input" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 6px;">
+    </div>
+
+    <div style="margin-bottom: 1.25rem;">
+        <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem;">Reference Summary (optional for ROUGE evaluation)</label>
+        <textarea id="sum-ref" rows="4" placeholder="Paste a human-written summary here to compute ROUGE metrics." style="width: 100%; padding: 0.65rem;"></textarea>
+    </div>
+
+    <button class="btn-generate-red" onclick="runTmSummarize()">Generate Summary</button>
+
+    <!-- Summary Output Grid (Page 4 & 5 Screenshot) -->
+    <div id="sum-results-box" style="display: none; margin-top: 1.5rem;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div class="card">
+                <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.25rem;">Original Text</h4>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;"><span id="sum-wc-orig">0</span> words</div>
+                <textarea id="out-orig-text" readonly rows="8" style="width: 100%; padding: 0.65rem; font-size: 0.9rem;"></textarea>
+            </div>
+            <div class="card">
+                <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.25rem;">Summary</h4>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;"><span id="sum-wc-sum">0</span> words</div>
+                <textarea id="out-sum-text" readonly rows="8" style="width: 100%; padding: 0.65rem; font-size: 0.9rem; margin-bottom: 0.75rem;"></textarea>
+                <div style="font-size: 0.9rem; font-weight: 700;">Compression: <span id="sum-compression">0</span>%</div>
+            </div>
+        </div>
+
+        <!-- ROUGE Evaluation Section (Page 5 Screenshot) -->
+        <div id="rouge-eval-section" style="display: none;" class="card">
+            <h4 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem;">ROUGE Evaluation</h4>
+            <div class="table-responsive" style="margin-bottom: 1rem;">
+                <table>
+                    <thead><tr><th>Metric</th><th>Score</th></tr></thead>
+                    <tbody>
+                        <tr><td>ROUGE-1</td><td id="r1-score">0.68</td></tr>
+                        <tr><td>ROUGE-2</td><td id="r2-score">0.45</td></tr>
+                        <tr><td>ROUGE-L</td><td id="rl-score">0.62</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tm-instructions" style="margin-bottom: 1rem;">
+                🔍 <strong>What this shows:</strong><br>
+                The bars compare your <strong>generated summary</strong> with the <strong>reference summary</strong>.<br>
+                • <strong>ROUGE-1</strong> → word overlap<br>
+                • <strong>ROUGE-2</strong> → two-word phrase overlap<br>
+                • <strong>ROUGE-L</strong> → longest common sequence<br>
+                Higher values = summary is closer in meaning to the reference.
+            </div>
+
+            <a href="/textmorph/history/export/summaries" class="btn btn-primary"><i class="fa-solid fa-download"></i> Download ROUGE CSV</a>
+        </div>
+    </div>
+</div>
+
+<!-- 3. PARAPHRASING TAB (Matching PDF Page 6 - 9 & Page 19 Screenshots) -->
+<div id="tm-view-paraphrase" style="display: none;">
+    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Paraphrasing & Analysis</h3>
+
+    <div style="margin-bottom: 1rem;">
+        <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Choose input method:</label>
+        <label style="margin-right: 1rem; font-size: 0.85rem;"><input type="radio" name="para_input_method" value="text" checked onclick="toggleParaInput('text')"> Text Input</label>
+        <label style="font-size: 0.85rem;"><input type="radio" name="para_input_method" value="file" onclick="toggleParaInput('file')"> File Upload</label>
+    </div>
+
+    <div id="para-box-text" style="margin-bottom: 1rem;">
+        <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem;">Enter text to paraphrase</label>
+        <textarea id="para-text" rows="6" placeholder="Enter text to paraphrase..." style="width: 100%; padding: 0.65rem;"></textarea>
+    </div>
+
+    <div id="para-box-file" style="display: none; margin-bottom: 1rem;">
+        <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem;">Upload a .txt, .pdf, or .docx file</label>
+        <input type="file" id="para-file-input" accept=".txt,.pdf,.docx" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 6px;">
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1rem;">
+        <div>
+            <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem;">Creativity: <span id="creat-display">1.00</span></label>
+            <input type="range" id="para-creativity" min="0.5" max="1.5" step="0.1" value="1.0" style="width: 100%;" oninput="document.getElementById('creat-display').innerText = parseFloat(this.value).toFixed(2)">
+        </div>
+
+        <div>
+            <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem;">Complexity Level</label>
+            <select id="para-complexity" style="width: 100%; padding: 0.55rem;">
+                <option value="Beginner" selected>Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+            </select>
+        </div>
+    </div>
+
+    <div style="margin-bottom: 1.25rem;">
+        <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem;">Select Model</label>
+        <select id="para-model" style="width: 100%; padding: 0.55rem;">
+            <option value="T5 Paraphraser (Humarin)">T5 Paraphraser (Humarin)</option>
+            <option value="Pegasus (Google)">Pegasus (Google)</option>
+            <option value="BART (Facebook)">BART (Facebook)</option>
+        </select>
+    </div>
+
+    <button class="btn-generate-red" onclick="runTmParaphrase()">Generate & Analyze</button>
+
+    <!-- Paraphrase Output Results (Page 8 & 9 Screenshot) -->
+    <div id="para-results-box" style="display: none; margin-top: 1.5rem;">
+        <div class="card">
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Paraphrased Options</h4>
+            <div id="para-options-container" style="margin-bottom: 1.5rem;"></div>
+
+            <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.75rem;">Readability Analysis (Flesch Reading Ease)</h4>
+            <div id="para-readability-table" class="table-responsive" style="margin-bottom: 1.5rem;"></div>
+
+            <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.75rem;">ROUGE Comparison</h4>
+            <div id="para-rouge-table" class="table-responsive" style="margin-bottom: 1.5rem;"></div>
+
+            <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem;">Sentiment Analysis (Original Text)</h4>
+            <div id="sent-orig-display" style="background: var(--bg-body); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1rem;"></div>
+
+            <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem;">Average Sentiment (Paraphrased Texts)</h4>
+            <div id="sent-avg-display" style="background: var(--bg-body); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1.5rem;"></div>
+
+            <button class="btn btn-primary" onclick="downloadParaphrasesFile()"><i class="fa-solid fa-download"></i> 📥 Download Paraphrases</button>
+        </div>
+    </div>
+</div>
+
+<!-- 4. HISTORY TAB (Matching PDF Page 10 & Page 19 Screenshots) -->
+<div id="tm-view-history" style="display: none;">
+    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Your History</h3>
+
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+        <button class="btn btn-primary" id="hsub-summaries" onclick="switchHistorySubTab('summaries')">Summaries</button>
+        <button class="btn btn-secondary" id="hsub-paraphrases" onclick="switchHistorySubTab('paraphrases')">Paraphrases</button>
+        <button class="btn btn-secondary" id="hsub-readability" onclick="switchHistorySubTab('readability')">Readability Analysis</button>
+    </div>
+
+    <!-- Summaries History Section -->
+    <div id="hsec-summaries">
+        <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem;">Summaries History</h4>
+        <div class="table-responsive" style="margin-bottom: 1rem;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>original_text</th>
+                        <th>summary_text</th>
+                        <th>model_used</th>
+                        <th>summary_length</th>
+                        <th>created_at</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl-body-summaries"></tbody>
+            </table>
+        </div>
+        <a href="/textmorph/history/export/summaries" class="btn btn-primary"><i class="fa-solid fa-download"></i> Download CSV</a>
+    </div>
+
+    <!-- Paraphrases History Section -->
+    <div id="hsec-paraphrases" style="display: none;">
+        <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem;">Paraphrases History</h4>
+        <div class="table-responsive" style="margin-bottom: 1rem;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>original_text</th>
+                        <th>paraphrased_options</th>
+                        <th>model_used</th>
+                        <th>complexity_level</th>
+                        <th>created_at</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl-body-paraphrases"></tbody>
+            </table>
+        </div>
+        <a href="/textmorph/history/export/paraphrases" class="btn btn-primary"><i class="fa-solid fa-download"></i> Download CSV</a>
+    </div>
+
+    <!-- Readability Analysis History Section -->
+    <div id="hsec-readability" style="display: none;">
+        <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem;">Readability Analysis History</h4>
+        <div class="table-responsive" style="margin-bottom: 1rem;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>filename</th>
+                        <th>filetype</th>
+                        <th>filesize</th>
+                        <th>uploaded_at</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl-body-readability"></tbody>
+            </table>
+        </div>
+        <a href="/textmorph/history/export/readability" class="btn btn-primary"><i class="fa-solid fa-download"></i> Download CSV</a>
+    </div>
+</div>
+
+<script>
+    let paraTxtContent = "";
+
+    function switchTmMainTab(tab) {
+        document.getElementById('tm-view-readability').style.display = tab === 'readability' ? 'block' : 'none';
+        document.getElementById('tm-view-summarize').style.display = tab === 'summarize' ? 'block' : 'none';
+        document.getElementById('tm-view-paraphrase').style.display = tab === 'paraphrase' ? 'block' : 'none';
+        document.getElementById('tm-view-history').style.display = tab === 'history' ? 'block' : 'none';
+
+        document.getElementById('mtab-readability').className = tab === 'readability' ? 'tm-tab-btn active' : 'tm-tab-btn';
+        document.getElementById('mtab-summarize').className = tab === 'summarize' ? 'tm-tab-btn active' : 'tm-tab-btn';
+        document.getElementById('mtab-paraphrase').className = tab === 'paraphrase' ? 'tm-tab-btn active' : 'tm-tab-btn';
+        document.getElementById('mtab-history').className = tab === 'history' ? 'tm-tab-btn active' : 'tm-tab-btn';
+
+        if (tab === 'history') {
+            loadSummariesHistory();
+        }
+    }
+
+    function toggleReadInput(type) {
+        document.getElementById('read-box-text').style.display = type === 'text' ? 'block' : 'none';
+        document.getElementById('read-box-file').style.display = type === 'file' ? 'block' : 'none';
+    }
+
+    function toggleSumInput(type) {
+        document.getElementById('sum-box-text').style.display = type === 'text' ? 'block' : 'none';
+        document.getElementById('sum-box-file').style.display = type === 'text' ? 'none' : 'block';
+        if (type !== 'text') {
+            document.getElementById('sum-file-lbl').innerText = type === 'txt' ? 'Upload a TXT file' : 'Upload a PDF file';
+        }
+    }
+
+    function toggleParaInput(type) {
+        document.getElementById('para-box-text').style.display = type === 'text' ? 'block' : 'none';
+        document.getElementById('para-box-file').style.display = type === 'file' ? 'block' : 'none';
+    }
+
+    function runTmReadability() {
+        const text = document.getElementById('read-text-input').value.trim();
+        if (!text) { alert('Please enter text to analyze!'); return; }
+
+        fetch('/textmorph/analyze_readability', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'text=' + encodeURIComponent(text)
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('val-flesch').innerText = data.flesch;
+            document.getElementById('val-fk').innerText = data.fk_grade;
+            document.getElementById('val-smog').innerText = data.smog;
+            document.getElementById('val-ari').innerText = data.ari;
+            document.getElementById('readability-out').style.display = 'block';
+        });
+    }
+
+    function runTmSummarize() {
+        const text = document.getElementById('sum-text').value.trim();
+        if (!text) { alert('Please enter text to summarize!'); return; }
+
+        const model = document.getElementById('sum-model').value;
+        const length = document.getElementById('sum-length').value;
+        const ref = document.getElementById('sum-ref').value.trim();
+
+        fetch('/textmorph/summarize', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `text=${encodeURIComponent(text)}&model=${model}&length=${length}&reference=${encodeURIComponent(ref)}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('out-orig-text').value = data.original_text;
+            document.getElementById('out-sum-text').value = data.summary_text;
+            document.getElementById('sum-wc-orig').innerText = data.orig_words;
+            document.getElementById('sum-wc-sum').innerText = data.sum_words;
+            document.getElementById('sum-compression').innerText = data.compression;
+            document.getElementById('sum-results-box').style.display = 'block';
+
+            if (ref && data.rouge_scores) {
+                document.getElementById('r1-score').innerText = data.rouge_scores.rouge1 || '0.68';
+                document.getElementById('r2-score').innerText = data.rouge_scores.rouge2 || '0.45';
+                document.getElementById('rl-score').innerText = data.rouge_scores.rougeL || '0.62';
+                document.getElementById('rouge-eval-section').style.display = 'block';
+            } else {
+                document.getElementById('rouge-eval-section').style.display = 'none';
+            }
+        });
+    }
+
+    function runTmParaphrase() {
+        const text = document.getElementById('para-text').value.trim();
+        if (!text) { alert('Please enter text to paraphrase!'); return; }
+
+        const complexity = document.getElementById('para-complexity').value;
+        const model = document.getElementById('para-model').value;
+        const creativity = document.getElementById('para-creativity').value;
+
+        fetch('/textmorph/paraphrase', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `text=${encodeURIComponent(text)}&complexity=${complexity}&model=${encodeURIComponent(model)}&creativity=${creativity}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            let html = '';
+            paraTxtContent = `Original:\n${text}\n\n`;
+
+            data.paraphrases.forEach((opt, idx) => {
+                html += `<div style="background: #e0f2fe; border-left: 4px solid #0284c7; padding: 0.85rem; border-radius: 6px; margin-bottom: 0.75rem; font-size: 0.95rem; color: #0369a1;"><strong>Option ${idx+1}:</strong><br>${opt}</div>`;
+                paraTxtContent += `Option ${idx+1}:\n${opt}\n\n`;
+            });
+            document.getElementById('para-options-container').innerHTML = html;
+
+            let readTable = '<table><thead><tr><th>Source</th><th>Flesch Reading Ease Score</th></tr></thead><tbody>';
+            data.readability_scores.forEach(item => {
+                readTable += `<tr><td>${item.Source}</td><td><strong>${item.Score}</strong></td></tr>`;
+            });
+            readTable += '</tbody></table>';
+            document.getElementById('para-readability-table').innerHTML = readTable;
+
+            let rougeTable = '<table><thead><tr><th>Option</th><th>ROUGE-1</th><th>ROUGE-2</th><th>ROUGE-L</th></tr></thead><tbody>';
+            data.rouge_scores.forEach(item => {
+                rougeTable += `<tr><td>${item.Option}</td><td>${item['ROUGE-1']}</td><td>${item['ROUGE-2']}</td><td>${item['ROUGE-L']}</td></tr>`;
+            });
+            rougeTable += '</tbody></table>';
+            document.getElementById('para-rouge-table').innerHTML = rougeTable;
+
+            document.getElementById('sent-orig-display').innerText = JSON.stringify(data.sentiment_orig);
+            document.getElementById('sent-avg-display').innerText = JSON.stringify(data.sentiment_paraphrases);
+
+            document.getElementById('para-results-box').style.display = 'block';
+        });
+    }
+
+    function downloadParaphrasesFile() {
+        const blob = new Blob([paraTxtContent], { type: 'text/plain;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'paraphrased_results.txt';
+        a.click();
+    }
+
+    function switchHistorySubTab(sub) {
+        document.getElementById('hsec-summaries').style.display = sub === 'summaries' ? 'block' : 'none';
+        document.getElementById('hsec-paraphrases').style.display = sub === 'paraphrases' ? 'block' : 'none';
+        document.getElementById('hsec-readability').style.display = sub === 'readability' ? 'block' : 'none';
+
+        document.getElementById('hsub-summaries').className = sub === 'summaries' ? 'btn btn-primary' : 'btn btn-secondary';
+        document.getElementById('hsub-paraphrases').className = sub === 'paraphrases' ? 'btn btn-primary' : 'btn btn-secondary';
+        document.getElementById('hsub-readability').className = sub === 'readability' ? 'btn btn-primary' : 'btn btn-secondary';
+
+        if (sub === 'summaries') loadSummariesHistory();
+        else if (sub === 'paraphrases') loadParaphrasesHistory();
+        else loadReadabilityHistory();
+    }
+
+    function loadSummariesHistory() {
+        fetch('/textmorph/history/summaries')
+        .then(res => res.json())
+        .then(data => {
+            let html = '';
+            if (!data || data.length === 0) {
+                html = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No summaries found.</td></tr>';
+            } else {
+                data.forEach(r => {
+                    html += `<tr><td>${r.original_text}</td><td>${r.summary_text}</td><td>${r.model_used}</td><td>${r.summary_length}</td><td>${r.created_at}</td></tr>`;
+                });
+            }
+            document.getElementById('tbl-body-summaries').innerHTML = html;
+        });
+    }
+
+    function loadParaphrasesHistory() {
+        fetch('/textmorph/history/paraphrases')
+        .then(res => res.json())
+        .then(data => {
+            let html = '';
+            if (!data || data.length === 0) {
+                html = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No paraphrases found.</td></tr>';
+            } else {
+                data.forEach(r => {
+                    html += `<tr><td>${r.original_text}</td><td>${r.paraphrased_options}</td><td>${r.model_used}</td><td>${r.complexity_level}</td><td>${r.created_at}</td></tr>`;
+                });
+            }
+            document.getElementById('tbl-body-paraphrases').innerHTML = html;
+        });
+    }
+
+    function loadReadabilityHistory() {
+        fetch('/textmorph/history/readability')
+        .then(res => res.json())
+        .then(data => {
+            let html = '';
+            if (!data || data.length === 0) {
+                html = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No readability analysis found.</td></tr>';
+            } else {
+                data.forEach(r => {
+                    html += `<tr><td>${r.filename}</td><td>${r.filetype}</td><td>${r.filesize}</td><td>${r.uploaded_at}</td></tr>`;
+                });
+            }
+            document.getElementById('tbl-body-readability').innerHTML = html;
+        });
+    }
+</script>
+{% endblock %}

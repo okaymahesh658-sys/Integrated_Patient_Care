@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h2 style="font-size: 1.5rem; font-weight: 700; color: #0284c7;">Pharmacy Management</h2>
+        <p style="color: #64748b; font-size: 0.9rem;">Dashboard / Pharmacy / Inventory & Dispensing</p>
+    </div>
+    <div>
+        <span style="background: #e0f2fe; color: #0284c7; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600;"><i class="fa-solid fa-pills"></i> Pharmacy Department</span>
+    </div>
+</div>
+
+<!-- KPI Cards (Page 11 PDF) -->
+<div class="grid-4" style="margin-bottom: 1.5rem;">
+    <div class="card" style="display: flex; align-items: center; justify-content: space-between; border-left: 4px solid #0284c7;">
+        <div>
+            <div style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Total Medicines</div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: #0284c7;">{{ total_medicines }}</div>
+            <div style="font-size: 0.75rem; color: #64748b;">All Medicines</div>
+        </div>
+        <div style="width: 44px; height: 44px; background: #e0f2fe; color: #0284c7; border-radius: 50%; display: grid; place-items: center; font-size: 1.25rem;"><i class="fa-solid fa-capsules"></i></div>
+    </div>
+    <div class="card" style="display: flex; align-items: center; justify-content: space-between; border-left: 4px solid #10b981;">
+        <div>
+            <div style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Available Stock</div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: #10b981;">{{ "{:,}".format(available_stock) }}</div>
+            <div style="font-size: 0.75rem; color: #64748b;">In Stock</div>
+        </div>
+        <div style="width: 44px; height: 44px; background: #d1fae5; color: #10b981; border-radius: 50%; display: grid; place-items: center; font-size: 1.25rem;"><i class="fa-solid fa-boxes-stacked"></i></div>
+    </div>
+    <div class="card" style="display: flex; align-items: center; justify-content: space-between; border-left: 4px solid #f59e0b;">
+        <div>
+            <div style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Low Stock Medicines</div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: #f59e0b;">{{ low_stock_count }}</div>
+            <div style="font-size: 0.75rem; color: #b45309;">Need Attention</div>
+        </div>
+        <div style="width: 44px; height: 44px; background: #fef3c7; color: #f59e0b; border-radius: 50%; display: grid; place-items: center; font-size: 1.25rem;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    </div>
+    <div class="card" style="display: flex; align-items: center; justify-content: space-between; border-left: 4px solid #ef4444;">
+        <div>
+            <div style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Expired Medicines</div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: #ef4444;">{{ expired_count }}</div>
+            <div style="font-size: 0.75rem; color: #ef4444;">Expired</div>
+        </div>
+        <div style="width: 44px; height: 44px; background: #fee2e2; color: #ef4444; border-radius: 50%; display: grid; place-items: center; font-size: 1.25rem;"><i class="fa-solid fa-ban"></i></div>
+    </div>
+</div>
+
+<!-- Medicine Inventory Table Card (Page 11 PDF) -->
+<div class="card" style="margin-bottom: 1.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #0284c7;"><i class="fa-solid fa-pills"></i> Medicine Inventory</h3>
+        <button type="button" class="btn btn-primary" onclick="document.getElementById('addMedModal').style.display='flex'"><i class="fa-solid fa-plus"></i> Add Medicine</button>
+    </div>
+
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Medicine ID</th>
+                    <th>Medicine Name</th>
+                    <th>Category</th>
+                    <th>Manufacturer</th>
+                    <th>Stock</th>
+                    <th>Unit Price (₹)</th>
+                    <th>Expiry Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in medicines %}
+                <tr>
+                    <td><strong>{{ m.medicine_code }}</strong></td>
+                    <td>{{ m.name }}</td>
+                    <td><span style="background: #e2e8f0; color: #475569; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">{{ m.category }}</span></td>
+                    <td>{{ m.manufacturer }}</td>
+                    <td><strong>{{ m.stock }}</strong></td>
+                    <td>₹{{ "%.2f"|format(m.unit_price) }}</td>
+                    <td>{{ m.expiry_date }}</td>
+                    <td>
+                        {% if m.status == 'Available' %}
+                        <span style="background: #dcfce7; color: #15803d; padding: 0.25rem 0.6rem; border-radius: 12px; font-weight: 700; font-size: 0.75rem;">Available</span>
+                        {% elif m.status == 'Low Stock' %}
+                        <span style="background: #fef3c7; color: #b45309; padding: 0.25rem 0.6rem; border-radius: 12px; font-weight: 700; font-size: 0.75rem;">Low Stock</span>
+                        {% else %}
+                        <span style="background: #fee2e2; color: #b91c1c; padding: 0.25rem 0.6rem; border-radius: 12px; font-weight: 700; font-size: 0.75rem;">Expired</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button class="btn btn-success" style="padding: 0.35rem 0.6rem; font-size: 0.75rem;" onclick="openDispenseModal({{ m.id }}, '{{ m.name }}', {{ m.stock }})"><i class="fa-solid fa-prescription-bottle"></i> Dispense</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Dispense & Add Medicine Modals -->
+<div id="addMedModal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 1000;">
+    <div style="background: white; border-radius: 12px; width: 90%; max-width: 550px; overflow: hidden;">
+        <div style="background: #0284c7; color: white; padding: 1rem 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="font-size: 1.1rem; font-weight: 700;"><i class="fa-solid fa-plus"></i> Add New Medicine</h3>
+            <button type="button" onclick="document.getElementById('addMedModal').style.display='none'" style="background: transparent; border: none; color: white; font-size: 1.2rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <form action="/pharmacy/add" method="POST" style="padding: 1.25rem;">
+            <div style="margin-bottom: 0.85rem;">
+                <label style="font-size: 0.8rem; font-weight: 600;">Medicine Name *</label>
+                <input type="text" name="name" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 0.85rem;">
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 600;">Category *</label>
+                    <select name="category" style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                        <option>Tablet</option><option>Capsule</option><option>Syrup</option><option>Injection</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 600;">Manufacturer *</label>
+                    <input type="text" name="manufacturer" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 600;">Stock *</label>
+                    <input type="number" name="stock" value="100" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 600;">Price (₹) *</label>
+                    <input type="number" step="0.01" name="unit_price" value="25.00" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 600;">Expiry Date *</label>
+                    <input type="text" name="expiry_date" value="31-12-2027" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+                <button type="button" onclick="document.getElementById('addMedModal').style.display='none'" class="btn btn-secondary">Cancel</button>
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Medicine</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="dispenseModal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 1000;">
+    <div style="background: white; border-radius: 12px; width: 90%; max-width: 450px; overflow: hidden;">
+        <div style="background: #10b981; color: white; padding: 1rem 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="font-size: 1.1rem; font-weight: 700;"><i class="fa-solid fa-prescription-bottle"></i> Dispense Medicine</h3>
+            <button type="button" onclick="document.getElementById('dispenseModal').style.display='none'" style="background: transparent; border: none; color: white; font-size: 1.2rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <form action="/pharmacy/dispense" method="POST" style="padding: 1.25rem;">
+            <input type="hidden" name="medicine_id" id="disp_med_id">
+            <div style="margin-bottom: 1rem;">
+                <label style="font-size: 0.8rem; font-weight: 600;">Selected Medicine</label>
+                <input type="text" id="disp_med_name" readonly style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px; background: #f8fafc; font-weight: 700;">
+            </div>
+            <div style="margin-bottom: 1.25rem;">
+                <label style="font-size: 0.8rem; font-weight: 600;">Quantity to Dispense *</label>
+                <input type="number" name="quantity" value="1" min="1" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+                <button type="button" onclick="document.getElementById('dispenseModal').style.display='none'" class="btn btn-secondary">Cancel</button>
+                <button type="submit" class="btn btn-success"><i class="fa-solid fa-check"></i> Confirm Dispense</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openDispenseModal(id, name, stock) {
+        document.getElementById('disp_med_id').value = id;
+        document.getElementById('disp_med_name').value = name + ' (Available: ' + stock + ')';
+        document.getElementById('dispenseModal').style.display = 'flex';
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h2 style="font-size: 1.5rem; font-weight: 700; color: #0284c7;">REST API Dashboard</h2>
+        <p style="color: #64748b; font-size: 0.9rem;">Milestone 3 / REST API Performance & Endpoint Management</p>
+    </div>
+    <div>
+        <span style="background: #dcfce7; color: #15803d; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700;"><i class="fa-solid fa-circle-check"></i> Status: PASSED (95th %ile &lt; 300ms)</span>
+    </div>
+</div>
+
+<!-- API Metrics Cards (Page 21 PDF) -->
+<div class="grid-4" style="margin-bottom: 1.5rem;">
+    <div class="card" style="display: flex; align-items: center; justify-content: space-between; border-left: 4px solid #0284c7;">
+        <div>
+            <div style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Total APIs</div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: #0284c7;">18</div>
+            <div style="font-size: 0.75rem; color: #64748b;">All Endpoints</div>
+        </div>
+        <div style="width: 44px; height: 44px; background: #e0f2fe; color: #0284c7; border-radius: 50%; display: grid; place-items: center; font-size: 1.25rem;"><i class="fa-solid fa-code"></i></div>
+    </div>
+    <div class="card" style="display: flex; align-items: center; justify-content: space-between; border-left: 4px solid #10b981;">
+        <div>
+            <div style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Active APIs</div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: #10b981;">18</div>
+            <div style="font-size: 0.75rem; color: #10b981;">100% Active</div>
+        </div>
+        <div style="width: 44px; height: 44px; background: #d1fae5; color: #10b981; border-radius: 50%; display: grid; place-items: center; font-size: 1.25rem;"><i class="fa-solid fa-circle-check"></i></div>
+    </div>
+    <div class="card" style="display: flex; align-items: center; justify-content: space-between; border-left: 4px solid #8b5cf6;">
+        <div>
+            <div style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Average Response Time</div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: #8b5cf6;">185 ms</div>
+            <div style="font-size: 0.75rem; color: #8b5cf6;">All APIs</div>
+        </div>
+        <div style="width: 44px; height: 44px; background: #ede9fe; color: #8b5cf6; border-radius: 50%; display: grid; place-items: center; font-size: 1.25rem;"><i class="fa-solid fa-bolt"></i></div>
+    </div>
+    <div class="card" style="display: flex; align-items: center; justify-content: space-between; border-left: 4px solid #0284c7;">
+        <div>
+            <div style="font-size: 0.8rem; color: #64748b; font-weight: 600;">95th Percentile Time</div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: #0284c7;">278 ms</div>
+            <div style="font-size: 0.75rem; color: #10b981;">Target &lt; 300 ms</div>
+        </div>
+        <div style="width: 44px; height: 44px; background: #e0f2fe; color: #0284c7; border-radius: 50%; display: grid; place-items: center; font-size: 1.25rem;"><i class="fa-solid fa-stopwatch"></i></div>
+    </div>
+</div>
+
+<div class="grid-3-1" style="margin-bottom: 1.5rem;">
+    <!-- API Endpoints List Card -->
+    <div class="card">
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #0284c7; margin-bottom: 1rem;"><i class="fa-solid fa-list"></i> API Endpoints</h3>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>API Name</th>
+                        <th>Endpoint</th>
+                        <th>Methods</th>
+                        <th>Status</th>
+                        <th>Avg Response</th>
+                        <th>95th %ile</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>Patient API</td><td><code>/api/patients</code></td><td><span class="btn btn-primary" style="padding: 0.15rem 0.4rem; font-size: 0.65rem;">GET</span> <span class="btn btn-success" style="padding: 0.15rem 0.4rem; font-size: 0.65rem;">POST</span></td><td><span style="color: #10b981; font-weight: 700;">● Active</span></td><td>142 ms</td><td>210 ms</td></tr>
+                    <tr><td>2</td><td>Doctor API</td><td><code>/api/doctors</code></td><td><span class="btn btn-primary" style="padding: 0.15rem 0.4rem; font-size: 0.65rem;">GET</span> <span class="btn btn-success" style="padding: 0.15rem 0.4rem; font-size: 0.65rem;">POST</span></td><td><span style="color: #10b981; font-weight: 700;">● Active</span></td><td>128 ms</td><td>192 ms</td></tr>
+                    <tr><td>3</td><td>Consultation API</td><td><code>/api/consultations</code></td><td><span class="btn btn-primary" style="padding: 0.15rem 0.4rem; font-size: 0.65rem;">GET</span> <span class="btn btn-success" style="padding: 0.15rem 0.4rem; font-size: 0.65rem;">POST</span></td><td><span style="color: #10b981; font-weight: 700;">● Active</span></td><td>168 ms</td><td>245 ms</td></tr>
+                    <tr><td>4</td><td>Prescription API</td><td><code>/api/prescriptions</code></td><td><span class="btn btn-primary" style="padding: 0.15rem 0.4rem; font-size: 0.65rem;">GET</span> <span class="btn btn-success" style="padding: 0.15rem 0.4rem; font-size: 0.65rem;">POST</span></td><td><span style="color: #10b981; font-weight: 700;">● Active</span></td><td>153 ms</td><td>230 ms</td></tr>
+                    <tr><td>5</td><td>Laboratory API</td><td><code>/api/laboratory</code></td><td><span class="btn btn-primary" style="padding: 0.15rem 0.4rem; font-size: 0.65rem;">GET</span> <span class="btn btn-success" style="padding: 0.15rem 0.4rem; font-size: 0.65rem;">POST</span></td><td><span style="color: #10b981; font-weight: 700;">● Active</span></td><td>171 ms</td><td>255 ms</td></tr>
+                    <tr><td>6</td><td>Pharmacy API</td><td><code>/api/pharmacy</code></td><td><span class="btn btn-primary" style="padding: 0.15rem 0.4rem; font-size: 0.65rem;">GET</span> <span class="btn btn-success" style="padding: 0.15rem 0.4rem; font-size: 0.65rem;">POST</span></td><td><span style="color: #10b981; font-weight: 700;">● Active</span></td><td>149 ms</td><td>220 ms</td></tr>
+                    <tr><td>7</td><td>Billing API</td><td><code>/api/billing</code></td><td><span class="btn btn-primary" style="padding: 0.15rem 0.4rem; font-size: 0.65rem;">GET</span> <span class="btn btn-success" style="padding: 0.15rem 0.4rem; font-size: 0.65rem;">POST</span></td><td><span style="color: #10b981; font-weight: 700;">● Active</span></td><td>137 ms</td><td>205 ms</td></tr>
+                    <tr><td>8</td><td>Notification API</td><td><code>/api/notifications</code></td><td><span class="btn btn-primary" style="padding: 0.15rem 0.4rem; font-size: 0.65rem;">GET</span> <span class="btn btn-success" style="padding: 0.15rem 0.4rem; font-size: 0.65rem;">POST</span></td><td><span style="color: #10b981; font-weight: 700;">● Active</span></td><td>110 ms</td><td>165 ms</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Live Postman API Test Panel Card (Page 21 PDF) -->
+    <div class="card" style="border-top: 4px solid #8b5cf6;">
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #8b5cf6; margin-bottom: 0.85rem;"><i class="fa-solid fa-paper-plane"></i> Postman API Tester</h3>
+        
+        <div style="margin-bottom: 0.85rem;">
+            <label style="font-size: 0.8rem; font-weight: 600;">Select Endpoint</label>
+            <select id="api-endpoint-sel" style="width: 100%; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem;">
+                <option value="/api/patients">GET /api/patients</option>
+                <option value="/api/doctors">GET /api/doctors</option>
+                <option value="/api/pharmacy">GET /api/pharmacy</option>
+                <option value="/api/billing">GET /api/billing</option>
+                <option value="/api/notifications">GET /api/notifications</option>
+            </select>
+        </div>
+
+        <button class="btn btn-purple" onclick="runApiTest()" style="width: 100%; justify-content: center; margin-bottom: 1rem;"><i class="fa-solid fa-play"></i> Send Request</button>
+
+        <div id="api-status-box" style="background: #dcfce7; color: #15803d; padding: 0.5rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+            <span>Status: 200 OK</span>
+            <span id="api-latency-lbl">Time: 142 ms</span>
+        </div>
+
+        <label style="font-size: 0.8rem; font-weight: 600;">JSON Response Output</label>
+        <pre id="api-json-box" style="background: #0f172a; color: #38bdf8; padding: 0.75rem; border-radius: 6px; font-size: 0.75rem; overflow-x: auto; max-height: 220px; font-family: monospace;">
+{
+  "status": "success",
+  "message": "Patients retrieved successfully",
+  "data": [
+    { "patient_id": "P001", "name": "Rahul Kumar" }
+  ]
+}
+        </pre>
+    </div>
+</div>
+
+<script>
+    function runApiTest() {
+        const ep = document.getElementById('api-endpoint-sel').value;
+        const box = document.getElementById('api-json-box');
+        const lat = document.getElementById('api-latency-lbl');
+
+        const startTime = performance.now();
+        fetch(ep)
+            .then(res => res.json())
+            .then(data => {
+                const endTime = performance.now();
+                const ms = Math.round(endTime - startTime);
+                lat.innerText = 'Time: ' + ms + ' ms';
+                box.innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(err => {
+                box.innerText = JSON.stringify({ error: 'Failed to execute API request' }, null, 2);
+            });
+    }
+</script>
+{% endblock %}

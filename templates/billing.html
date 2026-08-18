@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="margin-bottom: 1.5rem;">
+    <h2 style="font-size: 1.5rem; font-weight: 700; color: #0284c7;">Billing & Payment Management</h2>
+    <p style="color: #64748b; font-size: 0.9rem;">Dashboard / Billing / Patient Invoice & Payment</p>
+</div>
+
+<!-- Search Patient Card -->
+<div class="card" style="margin-bottom: 1.25rem;">
+    <form action="/billing" method="GET" style="display: flex; gap: 1rem; align-items: flex-end;">
+        <div style="flex: 1;">
+            <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.3rem;">Patient ID or Name</label>
+            <input type="text" name="patient_id" value="{{ patient.patient_code if patient else 'P001' }}" placeholder="Enter Patient ID (e.g. P001)" style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+        </div>
+        <button type="submit" class="btn btn-primary" style="padding: 0.65rem 1.5rem;"><i class="fa-solid fa-search"></i> Fetch Bill</button>
+    </form>
+</div>
+
+{% if patient %}
+<div class="grid-3-1" style="margin-bottom: 1.5rem;">
+    <!-- Bill Details Table Card -->
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0;">
+            <div>
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: #0284c7;">Patient Bill Details</h3>
+                <span style="font-size: 0.85rem; color: #64748b;">Patient: <strong>{{ patient.full_name }}</strong> ({{ patient.patient_code }}) | Age/Gender: {{ patient.age }} Yrs / {{ patient.gender }} | Phone: {{ patient.phone }}</span>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Service Type</th>
+                    <th>Description</th>
+                    <th>Reference ID</th>
+                    <th>Date</th>
+                    <th>Amount (₹)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td><span style="background: #e0f2fe; color: #0284c7; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">{{ item.type }}</span></td>
+                    <td>{{ item.desc }}</td>
+                    <td><code>{{ item.ref }}</code></td>
+                    <td>{{ item.date }}</td>
+                    <td>₹{{ "%.2f"|format(item.amount) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div style="margin-top: 1.25rem; display: flex; justify-content: flex-end;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; width: 300px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.85rem;">
+                    <span>Sub Total:</span>
+                    <span>₹{{ "%.2f"|format(total_amount) }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.85rem;">
+                    <span>Discount (0%):</span>
+                    <span>₹0.00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 2px solid #cbd5e1; font-weight: 700; font-size: 1.1rem; color: #0284c7;">
+                    <span>Total Amount:</span>
+                    <span>₹{{ "%.2f"|format(total_amount) }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment & Invoice Generation Card -->
+    <div class="card" style="border-top: 4px solid #10b981;">
+        <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem; color: #10b981;"><i class="fa-solid fa-credit-card"></i> Payment Details</h3>
+        
+        <form action="/billing/pay" method="POST">
+            <input type="hidden" name="patient_id" value="{{ patient.id }}">
+            <input type="hidden" name="patient_name" value="{{ patient.full_name }}">
+            <input type="hidden" name="amount" value="{{ total_amount }}">
+
+            <div style="margin-bottom: 0.85rem;">
+                <label style="font-size: 0.8rem; font-weight: 600;">Total Amount (₹)</label>
+                <input type="text" readonly value="₹{{ '%.2f'|format(total_amount) }}" style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px; background: #f8fafc; font-weight: 700; font-size: 1.1rem; color: #0284c7;">
+            </div>
+
+            <div style="margin-bottom: 0.85rem;">
+                <label style="font-size: 0.8rem; font-weight: 600;">Payment Method</label>
+                <select name="payment_method" style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                    <option value="UPI">UPI / QR Code</option>
+                    <option value="Credit Card">Credit / Debit Card</option>
+                    <option value="Cash">Cash</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 0.85rem;">
+                <label style="font-size: 0.8rem; font-weight: 600;">Transaction ID</label>
+                <input type="text" readonly value="UPI{{ range(1000000000, 9999999999)|random }}" style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px; background: #f8fafc; font-size: 0.85rem;">
+            </div>
+
+            <div style="margin-bottom: 1.25rem;">
+                <label style="font-size: 0.8rem; font-weight: 600;">Payment Status</label>
+                <span style="display: block; background: #dcfce7; color: #15803d; text-align: center; padding: 0.5rem; border-radius: 6px; font-weight: 700;">Paid</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                <button type="submit" class="btn btn-success" style="justify-content: center; width: 100%; padding: 0.65rem;"><i class="fa-solid fa-floppy-disk"></i> Record Payment</button>
+                <button type="button" onclick="window.print()" class="btn btn-primary" style="justify-content: center; width: 100%; padding: 0.65rem;"><i class="fa-solid fa-print"></i> Print Invoice</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<!-- Billing History Table Card -->
+<div class="card">
+    <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #0284c7;"><i class="fa-solid fa-history"></i> Billing History</h3>
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Bill ID</th>
+                    <th>Patient Name</th>
+                    <th>Bill Date</th>
+                    <th>Total Amount (₹)</th>
+                    <th>Payment Method</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in billing_history %}
+                <tr>
+                    <td><strong>{{ b.bill_code }}</strong></td>
+                    <td>{{ b.patient_name }}</td>
+                    <td>{{ b.created_at.strftime('%d-%m-%Y') }}</td>
+                    <td>₹{{ "%.2f"|format(b.final_amount) }}</td>
+                    <td><span style="background: #e2e8f0; color: #334155; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.75rem;">{{ b.payment_method }}</span></td>
+                    <td><span style="background: #dcfce7; color: #15803d; padding: 0.25rem 0.6rem; border-radius: 12px; font-weight: 700; font-size: 0.75rem;">Paid</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

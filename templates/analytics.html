@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h2 style="font-size: 1.5rem; font-weight: 700; color: #0284c7;">Dashboard Analytics & Security</h2>
+        <p style="color: #64748b; font-size: 0.9rem;">Milestone 3 / Advanced Hospital Analytics & RBAC Security</p>
+    </div>
+    <div>
+        <span style="background: #e0f2fe; color: #0284c7; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700;"><i class="fa-solid fa-shield-halved"></i> Role-Based Access Control Active</span>
+    </div>
+</div>
+
+<!-- 6 Hospital Overview KPIs (Page 31 PDF) -->
+<div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+    <div class="card" style="border-top: 4px solid #0284c7; padding: 1rem; text-align: center;">
+        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Total Patients</div>
+        <div style="font-size: 1.6rem; font-weight: 700; color: #0284c7;">{{ total_patients }}</div>
+        <div style="font-size: 0.7rem; color: #10b981;">▲ 12% from last month</div>
+    </div>
+    <div class="card" style="border-top: 4px solid #10b981; padding: 1rem; text-align: center;">
+        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Total Doctors</div>
+        <div style="font-size: 1.6rem; font-weight: 700; color: #10b981;">{{ total_doctors }}</div>
+        <div style="font-size: 0.7rem; color: #10b981;">▲ 8% from last month</div>
+    </div>
+    <div class="card" style="border-top: 4px solid #8b5cf6; padding: 1rem; text-align: center;">
+        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Total Appointments</div>
+        <div style="font-size: 1.6rem; font-weight: 700; color: #8b5cf6;">{{ total_appointments }}</div>
+        <div style="font-size: 0.7rem; color: #10b981;">▲ 15% from last month</div>
+    </div>
+    <div class="card" style="border-top: 4px solid #f59e0b; padding: 1rem; text-align: center;">
+        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Total Prescriptions</div>
+        <div style="font-size: 1.6rem; font-weight: 700; color: #f59e0b;">{{ total_prescriptions }}</div>
+        <div style="font-size: 0.7rem; color: #10b981;">▲ 10% from last month</div>
+    </div>
+    <div class="card" style="border-top: 4px solid #ef4444; padding: 1rem; text-align: center;">
+        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Lab Reports</div>
+        <div style="font-size: 1.6rem; font-weight: 700; color: #ef4444;">{{ total_lab_reports }}</div>
+        <div style="font-size: 0.7rem; color: #10b981;">▲ 18% from last month</div>
+    </div>
+    <div class="card" style="border-top: 4px solid #0284c7; padding: 1rem; text-align: center;">
+        <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Pharmacy Txns</div>
+        <div style="font-size: 1.6rem; font-weight: 700; color: #0284c7;">{{ total_pharmacy_txns }}</div>
+        <div style="font-size: 0.7rem; color: #10b981;">▲ 11% from last month</div>
+    </div>
+</div>
+
+<!-- Security & Access Control RBAC Matrix Table (Page 31 PDF) -->
+<div class="grid-3-1" style="margin-bottom: 1.5rem;">
+    <div class="card">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #0284c7; margin-bottom: 1rem;"><i class="fa-solid fa-user-lock"></i> Security & Access Control (RBAC Matrix)</h3>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Active Users</th>
+                        <th>Module Permissions</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in rbac_matrix %}
+                    <tr>
+                        <td><strong>{{ r.role }}</strong></td>
+                        <td>{{ r.users }}</td>
+                        <td>{{ r.permissions }}</td>
+                        <td><span style="background: #dcfce7; color: #15803d; padding: 0.25rem 0.6rem; border-radius: 12px; font-weight: 700; font-size: 0.75rem;">Active</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card" style="border-top: 4px solid #10b981;">
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #10b981; margin-bottom: 1rem;"><i class="fa-solid fa-server"></i> System Information</h3>
+        <div style="font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            <div style="display: flex; justify-content: space-between;"><span>Hospital Name:</span><strong>City Care Hospital</strong></div>
+            <div style="display: flex; justify-content: space-between;"><span>Software Version:</span><strong>v1.0.0 (Milestone 3)</strong></div>
+            <div style="display: flex; justify-content: space-between;"><span>Database Status:</span><span style="color: #10b981; font-weight: 700;">● Connected</span></div>
+            <div style="display: flex; justify-content: space-between;"><span>Total Users:</span><strong>45 Users</strong></div>
+            <div style="display: flex; justify-content: space-between;"><span>Active Sessions:</span><strong>12 Active</strong></div>
+            <div style="display: flex; justify-content: space-between;"><span>System Uptime:</span><strong>2 Days 4h 35m</strong></div>
+            <div style="display: flex; justify-content: space-between;"><span>Last Backup:</span><strong>22-07-2026 11:00 PM</strong></div>
+        </div>
+    </div>
+</div>
+
+<!-- Activity Logs Timeline -->
+<div class="card">
+    <h3 style="font-size: 1.1rem; font-weight: 700; color: #0284c7; margin-bottom: 1rem;"><i class="fa-solid fa-list-ul"></i> Recent System Activity Logs</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Activity Action</th>
+                <th>Timestamp</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in recent_logs %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ log.user }}</td>
+                <td>{{ log.time }}</td>
+                <td><span style="background: #dcfce7; color: #15803d; padding: 0.25rem 0.5rem; border-radius: 12px; font-weight: 700; font-size: 0.75rem;">Success</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Care Management System For Health Care Services</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS Color System with Theme Variables */
+        :root[data-theme="light"] {
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-sidebar: #ffffff;
+            --bg-header: #0369a1;
+            --bg-header-text: #ffffff;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --table-header-bg: #f8fafc;
+            --table-row-hover: #f1f5f9;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        :root[data-theme="dark"] {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --bg-sidebar: #1e293b;
+            --bg-header: #0f172a;
+            --bg-header-text: #f8fafc;
+            --text-dark: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --primary: #38bdf8;
+            --primary-dark: #0284c7;
+            --table-header-bg: #0f172a;
+            --table-row-hover: #334155;
+            --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Header Navigation */
+        .top-navbar {
+            background-color: var(--bg-header);
+            color: var(--bg-header-text);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--bg-header-text);
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 34px;
+            height: 34px;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            font-size: 1.1rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .theme-toggle-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--bg-header-text);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.4rem 0.85rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle-btn:hover { background: rgba(255, 255, 255, 0.25); }
+
+        .user-badge {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-logout {
+            color: white;
+            text-decoration: none;
+            background: rgba(239, 68, 68, 0.8);
+            padding: 0.35rem 0.85rem;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .btn-logout:hover { background: #dc2626; }
+
+        /* Main Container & Sidebar */
+        .app-body {
+            display: flex;
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            border-left: 4px solid var(--primary);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 0.85rem 1.25rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .alert-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+        .alert-danger { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+        .alert-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+
+        /* UI Cards & Buttons */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="date"], select, textarea {
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-success { background: #10b981; color: white; }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-secondary { background: var(--text-muted); color: white; }
+
+        /* Tables */
+        .table-responsive { overflow-x: auto; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 0.85rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-dark);
+        }
+        th {
+            background: var(--table-header-bg);
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+        tr:hover { background-color: var(--table-row-hover); }
+    </style>
+</head>
+<body>
+
+    <header class="top-navbar">
+        <a href="/" class="brand-logo">
+            <div class="brand-icon"><i class="fa-solid fa-hospital"></i></div>
+            <span>Patient Care Management System For Health Care Services</span>
+        </a>
+        <div class="user-menu">
+            <button class="theme-toggle-btn" onclick="toggleTheme()" id="theme-toggle-text">
+                <i class="fa-solid fa-moon" id="theme-icon"></i> <span id="theme-lbl">Dark Theme</span>
+            </button>
+            {% if current_user.is_authenticated %}
+            <div class="user-badge">
+                <i class="fa-solid fa-user-circle"></i>
+                <span>Welcome, {{ current_user.full_name }} ({{ current_user.role }})</span>
+            </div>
+            <a href="/logout" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="app-body">
+        {% if current_user.is_authenticated %}
+        <aside class="sidebar">
+            <a href="/dashboard" class="nav-link {% if request.path == '/dashboard' %}active{% endif %}">
+                <i class="fa-solid fa-chart-line"></i> Dashboard
+            </a>
+            <a href="/patients" class="nav-link {% if '/patient' in request.path %}active{% endif %}">
+                <i class="fa-solid fa-user-group"></i> Patient Management
+            </a>
+            <a href="/doctors" class="nav-link {% if '/doctor' in request.path %}active{% endif %}">
+                <i class="fa-solid fa-user-md"></i> Doctor Management
+            </a>
+            <a href="/appointments" class="nav-link {% if '/appointment' in request.path %}active{% endif %}">
+                <i class="fa-solid fa-calendar-check"></i> Appointments
+            </a>
+            <a href="/analytics" class="nav-link {% if '/analytics' in request.path %}active{% endif %}">
+                <i class="fa-solid fa-chart-pie"></i> Analytics Dashboard
+            </a>
+            <a href="/feedback" class="nav-link {% if '/feedback' in request.path %}active{% endif %}">
+                <i class="fa-solid fa-star"></i> Patient Feedback
+            </a>
+            <a href="/system-integration" class="nav-link {% if '/system-integration' in request.path %}active{% endif %}">
+                <i class="fa-solid fa-diagram-project"></i> System Integration
+            </a>
+            <a href="/textmorph" class="nav-link {% if '/textmorph' in request.path %}active{% endif %}" style="color: #8b5cf6;">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> TextMorph AI Engine
+            </a>
+            <a href="/reports" class="nav-link {% if '/report' in request.path %}active{% endif %}">
+                <i class="fa-solid fa-file-invoice"></i> Reports & Export
+            </a>
+        </aside>
+
+        {% endif %}
+
+        <main class="main-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }}">
+                    <span>{{ message }}</span>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script>
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const icon = document.getElementById('theme-icon');
+            const lbl = document.getElementById('theme-lbl');
+            if (theme === 'dark') {
+                icon.className = 'fa-solid fa-sun';
+                lbl.innerText = 'Light Theme';
+            } else {
+                icon.className = 'fa-solid fa-moon';
+                lbl.innerText = 'Dark Theme';
+            }
+            localStorage.setItem('ipcms_theme', theme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            applyTheme(currentTheme === 'light' ? 'dark' : 'light');
+        }
+
+        applyTheme(localStorage.getItem('ipcms_theme') || 'light');
+    </script>
+
+</body>
+</html>

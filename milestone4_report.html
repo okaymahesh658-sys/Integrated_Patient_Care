@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milestone 4 Report - Patient Care Management System For Health Care Services</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: #0f172a; padding: 30px 0; color: #0f172a; }
+
+        .page {
+            width: 297mm;
+            min-height: 210mm;
+            padding: 18mm 20mm;
+            margin: 0 auto 35px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            border: 3px solid #1e293b;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            position: relative;
+            page-break-after: always;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .confidential-header {
+            font-size: 9pt;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+
+        .cover-slide {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        .cover-title {
+            font-size: 42pt;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .cover-subtitle {
+            font-size: 18pt;
+            color: #475569;
+            font-weight: 500;
+            max-width: 800px;
+            line-height: 1.5;
+        }
+
+        .slide-heading {
+            font-size: 22pt;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .theory-card {
+            background: #f8fafc;
+            border-left: 6px solid #0284c7;
+            border-radius: 8px;
+            padding: 16px 20px;
+            font-size: 13pt;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .section-title-sm {
+            font-size: 14pt;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bullet-list {
+            list-style: none;
+            font-size: 11.5pt;
+            line-height: 1.8;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 22px;
+            margin-bottom: 6px;
+        }
+
+        .bullet-list li::before {
+            content: "•";
+            color: #0284c7;
+            font-weight: bold;
+            font-size: 16pt;
+            position: absolute;
+            left: 4px;
+            top: -2px;
+        }
+
+        .card-grid-6 {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .metric-box {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .metric-val {
+            font-size: 20pt;
+            font-weight: 800;
+            color: #0284c7;
+            margin-top: 4px;
+        }
+
+        .metric-lbl {
+            font-size: 9pt;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+
+        .badge-green { background: #dcfce7; color: #15803d; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 9pt; }
+        .badge-blue { background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 9pt; }
+
+        .footer-page {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 9pt;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SLIDE 1: COVER -->
+    <div class="page cover-slide">
+        <div class="confidential-header" style="width: 100%; text-align: left;">Classified as Microsoft Confidential</div>
+        <div style="margin: auto 0;">
+            <h1 class="cover-title">MILESTONE 4</h1>
+            <p class="cover-subtitle">Notification, Search & Reporting, Security, Final Deployment</p>
+        </div>
+        <div class="footer-page" style="width: 100%;">
+            <span>MediTrack - Patient Care Management System For Health Care Services</span>
+            <span>Milestone 4 Presentation</span>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: DAY 1 ANALYTICS DASHBOARD - THEORY -->
+    <div class="page">
+        <div class="confidential-header">Classified as Microsoft Confidential</div>
+        <div>
+            <h2 class="slide-heading"><i class="fa-solid fa-chart-line" style="color:#0284c7;"></i> Day 1 – Analytics Dashboard</h2>
+            <div class="theory-card">
+                <strong>Theory:</strong> Analytics dashboards help healthcare administrators monitor hospital operations, patient trends, doctor availability, and appointment statistics through interactive visualizations.
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                    <h3 class="section-title-sm" style="color: #0284c7;"><i class="fa-solid fa-list-check"></i> Activities</h3>
+                    <ul class="bullet-list">
+                        <li>Design the administrator dashboard.</li>
+                        <li>Display total registered patients.</li>
+                        <li>Display active doctors.</li>
+                        <li>Display today's appointments.</li>
+                        <li>Show completed consultations.</li>
+                        <li>Show cancelled appointments.</li>
+                        <li>Display pending laboratory reports.</li>
+                        <li>Show monthly patient registrations.</li>
+                        <li>Display doctor-wise consultation count.</li>
+                        <li>Display appointment trends using charts.</li>
+                        <li>Show patient demographics.</li>
+                        <li>Generate revenue summary (optional).</li>
+                        <li>Display system activity logs.</li>
+                    </ul>
+                </div>
+                <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                    <h3 class="section-title-sm" style="color: #10b981;"><i class="fa-solid fa-box-archive"></i> Deliverables</h3>
+                    <ul class="bullet-list">
+                        <li>Analytics dashboard completed.</li>
+                        <li>Interactive charts displayed.</li>
+                        <li>Real-time hospital statistics available.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-page">
+            <span>MediTrack Patient Care System</span>
+            <span>Page 2 / 10</span>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: DAY 1 ANALYTICS DASHBOARD MOCKUP -->
+    <div class="page">
+        <div class="confidential-header">Classified as Microsoft Confidential</div>
+        <div>
+            <h2 class="slide-heading" style="font-size: 18pt;"><i class="fa-solid fa-desktop" style="color:#0284c7;"></i> Day 1 – Analytics Dashboard Interface</h2>
+            <div class="card-grid-6">
+                <div class="metric-box"><div class="metric-lbl">Total Patients</div><div class="metric-val">12,540</div></div>
+                <div class="metric-box"><div class="metric-lbl">Active Doctors</div><div class="metric-val" style="color:#10b981;">86</div></div>
+                <div class="metric-box"><div class="metric-lbl">Today's Apt</div><div class="metric-val" style="color:#f59e0b;">214</div></div>
+                <div class="metric-box"><div class="metric-lbl">Completed</div><div class="metric-val" style="color:#8b5cf6;">178</div></div>
+                <div class="metric-box"><div class="metric-lbl">Cancelled</div><div class="metric-val" style="color:#ef4444;">12</div></div>
+                <div class="metric-box"><div class="metric-lbl">Pending Lab</div><div class="metric-val" style="color:#06b6d4;">35</div></div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; height: 260px;">
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px;">
+                    <h4 style="font-size: 11pt; margin-bottom: 10px; color: #0f172a;">Monthly Patient Registrations & Appointment Trends</h4>
+                    <canvas id="slide1Chart" style="max-height: 200px;"></canvas>
+                </div>
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px;">
+                    <h4 style="font-size: 11pt; margin-bottom: 10px; color: #0f172a;">Patient Demographics</h4>
+                    <canvas id="slide1Pie" style="max-height: 200px;"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="footer-page">
+            <span>MediTrack Analytics Dashboard</span>
+            <span>Page 3 / 10</span>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: DAY 2 ADMINISTRATIVE REPORTING -->
+    <div class="page">
+        <div class="confidential-header">Classified as Microsoft Confidential</div>
+        <div>
+            <h2 class="slide-heading"><i class="fa-solid fa-file-pdf" style="color:#ef4444;"></i> Day 2 – Administrative Reporting</h2>
+            <div class="theory-card">
+                <strong>Theory:</strong> Reports provide hospital administrators with insights into healthcare operations and support better decision-making.
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                    <h3 class="section-title-sm" style="color: #0284c7;"><i class="fa-solid fa-tasks"></i> Activities</h3>
+                    <ul class="bullet-list">
+                        <li>Generate patient reports.</li>
+                        <li>Generate appointment reports.</li>
+                        <li>Generate consultation reports.</li>
+                        <li>Generate prescription reports.</li>
+                        <li>Generate doctor performance reports.</li>
+                        <li>Generate department-wise reports.</li>
+                        <li>Generate monthly hospital reports.</li>
+                        <li>Export reports as PDF.</li>
+                        <li>Export reports as CSV/Excel.</li>
+                        <li>Print reports.</li>
+                    </ul>
+                </div>
+                <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                    <h3 class="section-title-sm" style="color: #10b981;"><i class="fa-solid fa-check-double"></i> Deliverables</h3>
+                    <ul class="bullet-list">
+                        <li>Reporting module completed.</li>
+                        <li>PDF reports generated.</li>
+                        <li>CSV/Excel export implemented.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-page">
+            <span>Administrative Reporting Module</span>
+            <span>Page 4 / 10</span>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: DAY 3 SYSTEM INTEGRATION -->
+    <div class="page">
+        <div class="confidential-header">Classified as Microsoft Confidential</div>
+        <div>
+            <h2 class="slide-heading"><i class="fa-solid fa-network-wired" style="color:#8b5cf6;"></i> Day 3 – System Integration</h2>
+            <div class="theory-card">
+                <strong>Theory:</strong> System integration combines all developed modules into a single workflow, ensuring seamless communication across the application.
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <h4 style="color: #0284c7; margin-bottom: 10px;">Modules Integrated (9/9)</h4>
+                    <ul class="bullet-list" style="font-size: 10.5pt;">
+                        <li>Patient Registration & EHR</li>
+                        <li>Appointment Scheduling</li>
+                        <li>Consultation & Prescriptions</li>
+                        <li>Notification System</li>
+                        <li>Authentication & Authorization (RBAC)</li>
+                        <li>REST APIs & Analytics Dashboard</li>
+                    </ul>
+                </div>
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <h4 style="color: #10b981; margin-bottom: 10px;">Verify Patient Workflow (Steps 1-7)</h4>
+                    <ol style="margin-left: 20px; font-size: 10.5pt; line-height: 1.8;">
+                        <li>Register Patient</li>
+                        <li>Book Appointment</li>
+                        <li>Doctor Consultation</li>
+                        <li>Update Medical Record</li>
+                        <li>Generate Prescription</li>
+                        <li>Send Notification</li>
+                        <li>Generate Reports</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="footer-page">
+            <span>System Integration & Workflow Verification</span>
+            <span>Page 5 / 10</span>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: DAY 4 TESTING & PERFORMANCE -->
+    <div class="page">
+        <div class="confidential-header">Classified as Microsoft Confidential</div>
+        <div>
+            <h2 class="slide-heading"><i class="fa-solid fa-gauge-high" style="color:#f59e0b;"></i> Day 4 – Testing & Performance Optimization</h2>
+            <div class="theory-card">
+                <strong>Theory:</strong> Testing ensures reliability, while optimization improves system speed and scalability.
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <h4 style="color: #0284c7; margin-bottom: 8px;"><i class="fa-solid fa-vial"></i> Functional Testing</h4>
+                    <ul class="bullet-list" style="font-size: 10pt;">
+                        <li>Registration & Login</li>
+                        <li>Appointments & Consultations</li>
+                        <li>Prescriptions & Reports</li>
+                    </ul>
+                </div>
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <h4 style="color: #ef4444; margin-bottom: 8px;"><i class="fa-solid fa-lock"></i> Security Testing</h4>
+                    <ul class="bullet-list" style="font-size: 10pt;">
+                        <li>JWT Validation & RBAC</li>
+                        <li>SQL Injection Prevention</li>
+                        <li>XSS Protection</li>
+                    </ul>
+                </div>
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <h4 style="color: #10b981; margin-bottom: 8px;"><i class="fa-solid fa-bolt"></i> Performance Testing</h4>
+                    <ul class="bullet-list" style="font-size: 10pt;">
+                        <li>API Response (< 185 ms)</li>
+                        <li>Query Optimization & Caching</li>
+                        <li>Pagination & Lazy Loading</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-page">
+            <span>Testing & Optimization Overview</span>
+            <span>Page 6 / 10</span>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: DAY 6 PATIENT FEEDBACK & SATISFACTION -->
+    <div class="page">
+        <div class="confidential-header">Classified as Microsoft Confidential</div>
+        <div>
+            <h2 class="slide-heading"><i class="fa-solid fa-star" style="color:#f59e0b;"></i> Day 6 – Patient Feedback & Satisfaction Module</h2>
+            <div class="theory-card">
+                <strong>Theory:</strong> The Patient Feedback Module enables hospitals to collect feedback from patients after consultations, laboratory services, prescriptions, or billing. The collected feedback helps administrators monitor service quality and enhance patient experience.
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <h4 style="color: #0284c7; margin-bottom: 8px;">Key Rating Categories</h4>
+                    <ul class="bullet-list" style="font-size: 10pt;">
+                        <li>Rate Doctor Performance (1–5 Stars)</li>
+                        <li>Rate Hospital Facilities</li>
+                        <li>Rate Laboratory Services</li>
+                        <li>Rate Pharmacy Dispensing</li>
+                        <li>Add Comments & Suggestions</li>
+                    </ul>
+                </div>
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <h4 style="color: #10b981; margin-bottom: 8px;">Deliverables & Analytics</h4>
+                    <ul class="bullet-list" style="font-size: 10pt;">
+                        <li>Feedback Database Table Created</li>
+                        <li>Average Satisfaction Score Calculated</li>
+                        <li>Filter Feedback by Doctor/Department/Rating</li>
+                        <li>Export Feedback Reports (PDF/Excel)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-page">
+            <span>Patient Feedback & Satisfaction Module</span>
+            <span>Page 7 / 10</span>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: DAY 7 SYSTEM INTEGRATION, TESTING & DEPLOYMENT -->
+    <div class="page">
+        <div class="confidential-header">Classified as Microsoft Confidential</div>
+        <div>
+            <h2 class="slide-heading"><i class="fa-solid fa-server" style="color:#0284c7;"></i> Day 7 – System Integration, Testing & Deployment</h2>
+            <div class="theory-card">
+                <strong>Theory:</strong> This stage combines all modules into a single application and ensures they work together seamlessly in production.
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <h4 style="color: #0284c7; margin-bottom: 8px;">Integration</h4>
+                    <p style="font-size: 9.5pt; color: #475569;">All 9 core modules connected: Auth, Patient Reg, Appointments, Doctor Consultation, EHR, Prescriptions, Lab, Billing, Notifications.</p>
+                </div>
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <h4 style="color: #8b5cf6; margin-bottom: 8px;">Testing Suite</h4>
+                    <p style="font-size: 9.5pt; color: #475569;">Unit, Integration, Security, API, and UAT testing executed cleanly without critical issues.</p>
+                </div>
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <h4 style="color: #10b981; margin-bottom: 8px;">Deployment</h4>
+                    <p style="font-size: 9.5pt; color: #475569;">Flask Application & SQLite/MySQL configured with env vars, DB backup, and local/cloud deployment ready.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-page">
+            <span>Final Deployment & Testing</span>
+            <span>Page 8 / 10</span>
+        </div>
+    </div>
+
+    <!-- SLIDE 9: OVERALL WORKFLOW -->
+    <div class="page">
+        <div class="confidential-header">Classified as Microsoft Confidential</div>
+        <div>
+            <h2 class="slide-heading" style="font-size: 18pt;"><i class="fa-solid fa-arrows-spin" style="color:#0284c7;"></i> Milestone 4 – Overall System Workflow</h2>
+            <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                <p style="font-size: 11pt; line-height: 1.8;">
+                    <strong>12-Step Complete System Lifecycle:</strong><br>
+                    1. User Login → 2. Patient Registration → 3. Appointment Booking → 4. Doctor Consultation → 5. Prescription Generation → 6. Laboratory Services → 7. Billing & Payment → 8. Patient Feedback Submission → 9. Admin Reviews Feedback Dashboard → 10. Generate Feedback Analytics Report → 11. Dashboard Updated with Satisfaction Score → 12. Secure Logout
+                </p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; text-align: center;">
+                <div style="background: #e0f2fe; padding: 12px; border-radius: 6px; color: #0369a1; font-weight: 700; font-size: 10pt;">Improved Patient Satisfaction</div>
+                <div style="background: #dcfce7; padding: 12px; border-radius: 6px; color: #15803d; font-weight: 700; font-size: 10pt;">Data-Driven Decision Making</div>
+                <div style="background: #f3e8ff; padding: 12px; border-radius: 6px; color: #6b21a8; font-weight: 700; font-size: 10pt;">Better Healthcare Services</div>
+                <div style="background: #fef3c7; padding: 12px; border-radius: 6px; color: #92400e; font-weight: 700; font-size: 10pt;">Continuous Optimization</div>
+            </div>
+        </div>
+        <div class="footer-page">
+            <span>Overall System Workflow</span>
+            <span>Page 9 / 10</span>
+        </div>
+    </div>
+
+    <!-- SLIDE 10: DELIVERABLES CHECKLIST -->
+    <div class="page">
+        <div class="confidential-header">Classified as Microsoft Confidential</div>
+        <div>
+            <h2 class="slide-heading"><i class="fa-solid fa-circle-check" style="color:#10b981;"></i> Final Milestone 4 Deliverables Checklist</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: #f8fafc; padding: 25px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                <ul class="bullet-list" style="list-style: none;">
+                    <li>✅ Analytics Dashboard</li>
+                    <li>✅ Interactive Charts & Graphs</li>
+                    <li>✅ Patient Feedback & Rating Module</li>
+                    <li>✅ Patient Satisfaction Dashboard</li>
+                    <li>✅ Administrative Reporting Module</li>
+                    <li>✅ PDF/Excel Report Export</li>
+                    <li>✅ Complete System Integration</li>
+                </ul>
+                <ul class="bullet-list" style="list-style: none;">
+                    <li>✅ End-to-End Workflow Verification</li>
+                    <li>✅ Functional Testing</li>
+                    <li>✅ Integration Testing</li>
+                    <li>✅ Security Testing</li>
+                    <li>✅ Performance Optimization</li>
+                    <li>✅ Database Backup & Recovery</li>
+                    <li>✅ Role-Based Access Control (RBAC)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-page">
+            <span>Final Deliverables Checklist</span>
+            <span>Page 10 / 10</span>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            if (document.getElementById('slide1Chart')) {
+                new Chart(document.getElementById('slide1Chart').getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [
+                            { label: 'Patient Registrations', data: [820, 950, 1120, 1340, 1560, 1780], borderColor: '#0284c7', backgroundColor: 'rgba(2,132,199,0.1)', fill: true },
+                            { label: 'Appointments', data: [120, 140, 160, 180, 190, 214], borderColor: '#10b981' }
+                        ]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+            if (document.getElementById('slide1Pie')) {
+                new Chart(document.getElementById('slide1Pie').getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Male (38%)', 'Female (32%)', 'Children (18%)', 'Seniors (12%)'],
+                        datasets: [{ data: [38, 32, 18, 12], backgroundColor: ['#0284c7', '#ec4899', '#10b981', '#f59e0b'] }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

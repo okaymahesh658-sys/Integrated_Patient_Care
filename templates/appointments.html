@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="margin-bottom: 1.5rem;">
+    <h2 style="font-size: 1.5rem; font-weight: 700; color: #0284c7;"><i class="fa-solid fa-calendar-check"></i> Book Appointment</h2>
+    <p style="color: #64748b; font-size: 0.9rem;">Fill in the details below to book an appointment with your preferred doctor.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+
+    <!-- Book Appointment Form Card (Page 35 screenshot) -->
+    <div class="card">
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #0284c7; margin-bottom: 1rem;">Appointment Form</h3>
+
+        <form action="/book" method="POST">
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem;">Patient *</label>
+                <select name="patient_id" required style="width: 100%; padding: 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                    {% for p in patients %}
+                    <option value="{{ p.id }}">{{ p.full_name }} ({{ p.patient_code }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem;">Doctor *</label>
+                <select name="doctor_id" required style="width: 100%; padding: 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                    {% for d in doctors %}
+                    <option value="{{ d.id }}">{{ d.full_name }} ({{ d.specialization }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem;">Appointment Date *</label>
+                <input type="date" name="date" value="2026-05-20" required style="width: 100%; padding: 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem;">Appointment Time *</label>
+                <input type="text" name="time" value="10:30 AM" placeholder="10:30 AM" required style="width: 100%; padding: 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem;"><i class="fa-solid fa-calendar-plus"></i> Book Appointment</button>
+        </form>
+    </div>
+
+    <!-- Available Doctors Card (Page 35 screenshot) -->
+    <div class="card">
+        <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Available Doctors</h3>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Doctor Name</th>
+                        <th>Specialization</th>
+                        <th>Available Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for d in doctors %}
+                    <tr>
+                        <td><strong>{{ d.full_name }}</strong></td>
+                        <td>{{ d.specialization }}</td>
+                        <td><span style="background: #dcfce7; color: #15803d; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">{{ d.available_time }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- Appointments List (Page 35 & 46 screenshot) -->
+<div class="card">
+    <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem;">All Scheduled Appointments</h3>
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Patient Name</th>
+                    <th>Doctor Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in appointments %}
+                <tr>
+                    <td><strong>{{ a.appointment_code }}</strong></td>
+                    <td>{{ a.patient_name }}</td>
+                    <td>{{ a.doctor_name }}</td>
+                    <td>{{ a.appointment_date }}</td>
+                    <td>{{ a.appointment_time }}</td>
+                    <td><span style="background: #dcfce7; color: #15803d; padding: 0.25rem 0.65rem; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">{{ a.status }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

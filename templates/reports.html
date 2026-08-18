@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="margin-bottom: 1.5rem;">
+    <h2 style="font-size: 1.5rem; font-weight: 700; color: #0284c7;">Reports</h2>
+    <p style="color: #64748b; font-size: 0.9rem;">Generate & View Monthly Patient Care Reports</p>
+</div>
+
+<!-- Select Report Form Card (Page 46 screenshot) -->
+<div class="card" style="margin-bottom: 1.5rem;">
+    <div style="display: flex; gap: 1rem; align-items: flex-end;">
+        <div style="flex: 1;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem;">Select Report Type</label>
+            <select style="width: 100%; padding: 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                <option value="monthly" selected>Monthly Appointment Report</option>
+                <option value="doctors">Doctor Performance Report</option>
+                <option value="patients">Patient Registration Summary</option>
+            </select>
+        </div>
+        <button class="btn btn-primary" style="padding: 0.65rem 1.5rem;"><i class="fa-solid fa-gear"></i> Generate Report</button>
+    </div>
+</div>
+
+<!-- Monthly Report Table Card (Page 46 screenshot) -->
+<div class="card">
+    <h3 style="font-size: 1.1rem; font-weight: 700; color: #0284c7; margin-bottom: 1rem;">Monthly Appointment Report - May 2026</h3>
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date Period</th>
+                    <th>Total Appointments</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>01-05-2026 to 07-05-2026</td>
+                    <td><strong>12</strong></td>
+                </tr>
+                <tr>
+                    <td>08-05-2026 to 14-05-2026</td>
+                    <td><strong>15</strong></td>
+                </tr>
+                <tr>
+                    <td>15-05-2026 to 21-05-2026</td>
+                    <td><strong>18</strong></td>
+                </tr>
+                <tr>
+                    <td>22-05-2026 to 31-05-2026</td>
+                    <td><strong>14</strong></td>
+                </tr>
+                <tr style="background: #f0f9ff; font-weight: 700;">
+                    <td>Total Monthly Appointments</td>
+                    <td style="color: #0284c7; font-size: 1.1rem;">59</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

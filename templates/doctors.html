@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="margin-bottom: 1.5rem;">
+    <h2 style="font-size: 1.5rem; font-weight: 700; color: #0284c7;">Doctor Management</h2>
+    <p style="color: #64748b; font-size: 0.9rem;">Dashboard / Doctors / Doctor List</p>
+</div>
+
+<!-- Add / Edit Doctor Card -->
+<div class="card" id="edit-doctor-card">
+    {% if edit_doctor %}
+    <h3 style="font-size: 1.1rem; font-weight: 700; color: #0284c7; margin-bottom: 1rem;"><i class="fa-solid fa-user-pen"></i> Edit Doctor ({{ edit_doctor.doctor_code }})</h3>
+    <form action="{{ url_for('doctor.edit_doctor', doctor_id=edit_doctor.id) }}" method="POST">
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1rem;">
+            <div>
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Doctor Name *</label>
+                <input type="text" name="full_name" value="{{ edit_doctor.full_name }}" placeholder="Enter full name" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Specialization *</label>
+                <input type="text" name="specialization" value="{{ edit_doctor.specialization }}" placeholder="Cardiologist, Neurologist..." required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Qualification *</label>
+                <input type="text" name="qualification" value="{{ edit_doctor.qualification }}" placeholder="MD, DM..." required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Department *</label>
+                <input type="text" name="department" value="{{ edit_doctor.department }}" placeholder="Cardiology, Neurology..." required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr) auto; gap: 1rem; align-items: end;">
+            <div>
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Phone Number *</label>
+                <input type="text" name="phone" value="{{ edit_doctor.phone }}" placeholder="9876543210" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Email Address *</label>
+                <input type="email" name="email" value="{{ edit_doctor.email }}" placeholder="doctor@hospital.com" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Available Time *</label>
+                <input type="text" name="available_time" value="{{ edit_doctor.available_time }}" placeholder="10:00 AM - 02:00 PM" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button type="submit" class="btn btn-success" style="padding: 0.65rem 1.5rem;"><i class="fa-solid fa-floppy-disk"></i> Update Doctor</button>
+                <a href="{{ url_for('doctor.list_doctors') }}" class="btn btn-secondary" style="padding: 0.65rem 1.5rem;"><i class="fa-solid fa-xmark"></i> Cancel</a>
+            </div>
+        </div>
+    </form>
+    {% else %}
+    <h3 style="font-size: 1.1rem; font-weight: 700; color: #0284c7; margin-bottom: 1rem;"><i class="fa-solid fa-user-doctor"></i> Add New Doctor</h3>
+    
+    <form action="/doctor/add" method="POST">
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1rem;">
+            <div>
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Doctor Name *</label>
+                <input type="text" name="full_name" placeholder="Enter full name" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Specialization *</label>
+                <input type="text" name="specialization" placeholder="Cardiologist, Neurologist..." required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Qualification *</label>
+                <input type="text" name="qualification" placeholder="MD, DM..." required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Department *</label>
+                <input type="text" name="department" placeholder="Cardiology, Neurology..." required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr) auto; gap: 1rem; align-items: end;">
+            <div>
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Phone Number *</label>
+                <input type="text" name="phone" placeholder="9876543210" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Email Address *</label>
+                <input type="email" name="email" placeholder="doctor@hospital.com" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Available Time *</label>
+                <input type="text" name="available_time" placeholder="10:00 AM - 02:00 PM" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div>
+                <button type="submit" class="btn btn-success" style="padding: 0.65rem 1.5rem;"><i class="fa-solid fa-plus"></i> Add Doctor</button>
+            </div>
+        </div>
+    </form>
+    {% endif %}
+</div>
+
+<!-- Doctor List Table Card -->
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 style="font-size: 1.15rem; font-weight: 700;">Doctor List</h3>
+        <form action="/doctors" method="GET" style="display: flex; gap: 0.5rem;">
+            <input type="text" name="search" value="{{ search }}" placeholder="Search doctor..." style="padding: 0.5rem 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem;">
+            <button type="submit" class="btn btn-primary" style="padding: 0.5rem 0.85rem;"><i class="fa-solid fa-search"></i> Search</button>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Doctor ID</th>
+                    <th>Doctor Name</th>
+                    <th>Specialization</th>
+                    <th>Department</th>
+                    <th>Phone Number</th>
+                    <th>Email Address</th>
+                    <th>Available Time</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in doctors %}
+                <tr {% if edit_doctor and edit_doctor.id == d.id %}style="background-color: rgba(2, 132, 199, 0.08); font-weight: 600;"{% endif %}>
+                    <td><strong>{{ d.doctor_code }}</strong></td>
+                    <td>{{ d.full_name }}</td>
+                    <td>{{ d.specialization }}</td>
+                    <td><span style="background: #e0f2fe; color: #0284c7; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">{{ d.department }}</span></td>
+                    <td>{{ d.phone }}</td>
+                    <td>{{ d.email }}</td>
+                    <td><span style="background: #fef3c7; color: #b45309; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">{{ d.available_time }}</span></td>
+                    <td>
+                        <button type="button" class="btn btn-warning" onclick="openDoctorModal({{ d.id }}, '{{ d.doctor_code }}', '{{ d.full_name|escape }}', '{{ d.specialization|escape }}', '{{ d.qualification|escape }}', '{{ d.department|escape }}', '{{ d.phone|escape }}', '{{ d.email|escape }}', '{{ d.available_time|escape }}')" style="padding: 0.35rem 0.6rem; font-size: 0.75rem; margin-right: 0.3rem;" title="Edit Doctor Modal"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                        <form action="/doctor/delete/{{ d.id }}" method="POST" onsubmit="return confirm('Delete doctor {{ d.full_name }}?');" style="display: inline;">
+                            <button type="submit" class="btn btn-danger" style="padding: 0.35rem 0.6rem; font-size: 0.75rem;"><i class="fa-solid fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Edit Doctor Modal Dialog -->
+<div id="flaskDoctorModal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 1000;">
+    <div style="background: #ffffff; border-radius: 12px; width: 90%; max-width: 650px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); overflow: hidden;">
+        <div style="background: #0284c7; color: white; padding: 1rem 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+            <h3 id="modalDoctorTitle" style="font-size: 1.1rem; font-weight: 700;"><i class="fa-solid fa-user-pen"></i> Edit Doctor Details</h3>
+            <button type="button" onclick="closeFlaskDoctorModal()" style="background: transparent; border: none; color: white; font-size: 1.25rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <form id="flaskDoctorForm" method="POST" style="padding: 1.25rem;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.3rem;">Doctor Code</label>
+                    <input type="text" id="m_doc_code" readonly style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px; background: #f8fafc; font-weight: 600;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.3rem;">Full Name *</label>
+                    <input type="text" name="full_name" id="m_doc_name" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.3rem;">Specialization *</label>
+                    <input type="text" name="specialization" id="m_doc_spec" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.3rem;">Qualification *</label>
+                    <input type="text" name="qualification" id="m_doc_qual" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.3rem;">Department *</label>
+                    <input type="text" name="department" id="m_doc_dept" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.3rem;">Phone Number *</label>
+                    <input type="text" name="phone" id="m_doc_phone" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.3rem;">Email Address *</label>
+                    <input type="email" name="email" id="m_doc_email" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.3rem;">Available Time *</label>
+                    <input type="text" name="available_time" id="m_doc_time" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem; border-top: 1px solid #cbd5e1; padding-top: 1rem;">
+                <button type="button" onclick="closeFlaskDoctorModal()" class="btn btn-secondary" style="padding: 0.6rem 1.2rem;">Cancel</button>
+                <button type="submit" class="btn btn-success" style="padding: 0.6rem 1.5rem;"><i class="fa-solid fa-floppy-disk"></i> Update Doctor</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openDoctorModal(id, code, name, spec, qual, dept, phone, email, time) {
+        document.getElementById('flaskDoctorForm').action = '/doctor/edit/' + id;
+        document.getElementById('modalDoctorTitle').innerHTML = '<i class="fa-solid fa-user-pen"></i> Edit Doctor (' + code + ')';
+        document.getElementById('m_doc_code').value = code;
+        document.getElementById('m_doc_name').value = name;
+        document.getElementById('m_doc_spec').value = spec;
+        document.getElementById('m_doc_qual').value = qual;
+        document.getElementById('m_doc_dept').value = dept;
+        document.getElementById('m_doc_phone').value = phone;
+        document.getElementById('m_doc_email').value = email;
+        document.getElementById('m_doc_time').value = time;
+        document.getElementById('flaskDoctorModal').style.display = 'flex';
+    }
+
+    function closeFlaskDoctorModal() {
+        document.getElementById('flaskDoctorModal').style.display = 'none';
+    }
+
+    {% if edit_doctor %}
+    document.addEventListener("DOMContentLoaded", function() {
+        const el = document.getElementById("edit-doctor-card");
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+    });
+    {% endif %}
+</script>
+{% endblock %}

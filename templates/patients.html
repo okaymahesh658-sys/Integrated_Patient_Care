@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem;">
+
+    <!-- Patient Registration Form Card -->
+    <div class="card">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #0284c7; margin-bottom: 1.25rem;">Patient Registration</h3>
+
+        <form action="/patient/register" method="POST">
+            <div style="margin-bottom: 0.85rem;">
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Full Name *</label>
+                <input type="text" name="full_name" placeholder="Ravi Kumar" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 0.85rem;">
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Age *</label>
+                    <input type="number" name="age" placeholder="32" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Gender *</label>
+                    <select name="gender" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 0.85rem;">
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Blood Group *</label>
+                    <select name="blood_group" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                        <option value="O+">O+</option>
+                        <option value="A+">A+</option>
+                        <option value="B+">B+</option>
+                        <option value="AB+">AB+</option>
+                        <option value="O-">O-</option>
+                        <option value="A-">A-</option>
+                        <option value="B-">B-</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Phone Number *</label>
+                    <input type="text" name="phone" placeholder="9876543210" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 0.85rem;">
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Email Address</label>
+                <input type="email" name="email" placeholder="ravi.kumar@example.com" style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+
+            <div style="margin-bottom: 0.85rem;">
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Address *</label>
+                <textarea name="address" rows="2" placeholder="123, MG Road, Bangalore, Karnataka" required style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;"></textarea>
+            </div>
+
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem;">Medical History (Optional)</label>
+                <textarea name="medical_history" rows="2" placeholder="No known allergies" style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px;"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;"><i class="fa-solid fa-user-plus"></i> Register Patient</button>
+        </form>
+    </div>
+
+    <!-- Patient List Table Card (Page 22 screenshot) -->
+    <div class="card">
+        <div style="margin-bottom: 1.25rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700;">Patient List</h3>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Phone Number</th>
+                        <th>Blood Group</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in patients %}
+                    <tr>
+                        <td><strong>{{ p.patient_code }}</strong></td>
+                        <td>{{ p.full_name }}</td>
+                        <td>{{ p.age }}</td>
+                        <td>{{ p.gender }}</td>
+                        <td>{{ p.phone }}</td>
+                        <td><span style="background: #ef4444; color: white; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">{{ p.blood_group }}</span></td>
+                        <td style="display: flex; gap: 0.35rem;">
+                            <a href="/patient/{{ p.id }}" class="btn btn-primary" style="padding: 0.35rem 0.6rem; font-size: 0.75rem;">View Profile</a>
+                            <form action="/patient/delete/{{ p.id }}" method="POST" onsubmit="return confirm('Delete patient {{ p.full_name }}?');" style="display: inline;">
+                                <button type="submit" class="btn btn-danger" style="padding: 0.35rem 0.6rem; font-size: 0.75rem;">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

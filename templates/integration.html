@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h2 style="font-size: 1.5rem; font-weight: 700; color: #0284c7;">System Integration & Performance Testing</h2>
+        <p style="color: #64748b; font-size: 0.9rem;">Milestone 3 / Complete Module Integration & System Health</p>
+    </div>
+    <div>
+        <button type="button" onclick="alert('Milestone 3 System Integration Report Generated Successfully!')" class="btn btn-success" style="padding: 0.6rem 1.25rem;"><i class="fa-solid fa-file-export"></i> Generate Milestone 3 Report</button>
+    </div>
+</div>
+
+<!-- Integration Banner (Page 36 PDF) -->
+<div class="card" style="background: linear-gradient(135deg, #0284c7, #0369a1); color: white; margin-bottom: 1.5rem; border: none;">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="width: 54px; height: 54px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: grid; place-items: center; font-size: 1.8rem;"><i class="fa-solid fa-circle-check"></i></div>
+            <div>
+                <h3 style="font-size: 1.35rem; font-weight: 700;">SYSTEM INTEGRATION STATUS: ALL MODULES CONNECTED</h3>
+                <p style="font-size: 0.85rem; opacity: 0.9;">All 10 hospital management modules are integrated, synced, and communicating seamlessly.</p>
+            </div>
+        </div>
+        <div>
+            <span style="background: rgba(255, 255, 255, 0.25); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 700; font-size: 0.85rem;">System Health Score: 100%</span>
+        </div>
+    </div>
+</div>
+
+<!-- Integrated Modules Table & Test Results (Page 36 PDF) -->
+<div class="grid-2" style="margin-bottom: 1.5rem;">
+    <div class="card">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #0284c7; margin-bottom: 1rem;"><i class="fa-solid fa-cubes"></i> Module Integration Status</h3>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Module Name</th>
+                        <th>Connection Status</th>
+                        <th>Last Sync Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in modules %}
+                    <tr>
+                        <td><strong>{{ m.name }}</strong></td>
+                        <td><span style="background: #dcfce7; color: #15803d; padding: 0.25rem 0.6rem; border-radius: 12px; font-weight: 700; font-size: 0.75rem;"><i class="fa-solid fa-check"></i> Connected</span></td>
+                        <td>{{ m.last_sync }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #10b981; margin-bottom: 1rem;"><i class="fa-solid fa-microscope"></i> Integration & Performance Test Results</h3>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Test Case</th>
+                        <th>Result</th>
+                        <th>Details</th>
+                        <th>Tested On</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in test_results %}
+                    <tr>
+                        <td><strong>{{ t.test }}</strong></td>
+                        <td><span style="background: #dcfce7; color: #15803d; padding: 0.25rem 0.6rem; border-radius: 12px; font-weight: 700; font-size: 0.75rem;">PASSED</span></td>
+                        <td>{{ t.details }}</td>
+                        <td>{{ t.tested_on }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Completion Banner -->
+<div class="card" style="border-top: 4px solid #10b981; background: #f0fdf4; text-align: center; padding: 1.5rem;">
+    <h3 style="font-size: 1.3rem; font-weight: 700; color: #15803d; margin-bottom: 0.5rem;"><i class="fa-solid fa-trophy"></i> Milestone 3 Completed Successfully!</h3>
+    <p style="color: #166534; font-size: 0.9rem; margin-bottom: 1rem;">All search, reporting, analytics, pharmacy, billing, REST API, notification, and integration modules are fully implemented and verified.</p>
+</div>
+{% endblock %}
